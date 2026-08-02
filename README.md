@@ -1,154 +1,75 @@
-# Portfolio V2 🚀
+# React + TypeScript + Vite
 
-A modern, responsive, and performance-focused portfolio showcasing my journey in Artificial Intelligence, Machine Learning, Web Development, and Cloud Computing.
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-> **Status:** 🚧 Under Development
+Currently, two official plugins are available:
 
----
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## 🎯 Objective
+## React Compiler
 
-Portfolio V2 is being built as a premium personal website to showcase:
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-- AI & Machine Learning Projects
-- Web Development Projects
-- Internship Experience
-- Technical Skills
-- GitHub Contributions
-- Certifications
-- Professional Journey
+## Expanding the ESLint configuration
 
-The focus is on creating a clean, modern, and recruiter-friendly portfolio with excellent performance and user experience.
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
----
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
 
-## ✨ Planned Features
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
 
-- Responsive Design
-- Modern UI/UX
-- Smooth Animations
-- Project Showcase
-- Interactive Timeline
-- Skills Section
-- Experience Section
-- Certifications
-- Resume Download
-- Contact Form
-- SEO Optimization
-- High Lighthouse Score
-- Fast Loading Performance
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 
----
-
-## 🛠 Tech Stack
-
-### Frontend
-
-- React
-- TypeScript
-- Vite
-- Tailwind CSS
-
-### Animations
-
-- Motion
-- ReactBits Components
-- Modern UI Effects
-
-### Development
-
-- Git
-- GitHub
-- VS Code
-
-### Deployment
-
-- Vercel (Planned)
-
----
-
-## 📂 Planned Project Structure
-
-```text
-portfolio-v2/
-
-├── docs/
-├── prompts/
-├── public/
-├── src/
-│   ├── assets/
-│   ├── components/
-│   ├── pages/
-│   ├── animations/
-│   ├── hooks/
-│   ├── styles/
-│   ├── data/
-│   ├── utils/
-│   └── types/
-│
-├── README.md
-└── package.json
 ```
 
----
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-## 📅 Development Roadmap
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-### Phase 1
-- [ ] Project Setup
-- [ ] Design System
-- [ ] Navigation
-- [ ] Hero Section
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 
-### Phase 2
-- [ ] About
-- [ ] Skills
-- [ ] Experience
-- [ ] Timeline
-
-### Phase 3
-- [ ] Projects
-- [ ] Certifications
-- [ ] Contact
-- [ ] Footer
-
-### Phase 4
-- [ ] SEO
-- [ ] Performance
-- [ ] Accessibility
-- [ ] Deployment
-
----
-
-## 📈 Current Progress
-
-- [x] Repository Created
-- [x] Planning Started
-- [ ] UI Design
-- [ ] Development
-- [ ] Testing
-- [ ] Deployment
-
----
-
-## 📌 Goals
-
-- Create a professional portfolio for recruiters.
-- Showcase high-quality engineering projects.
-- Maintain clean architecture and documentation.
-- Continuously improve with new projects and experiences.
-
----
-
-📬 Connect
-
-🌐 Portfolio (V1): https://akashsuresh.me
-
-💻 GitHub: https://github.com/AkashS-0107
-
-💼 LinkedIn: https://www.linkedin.com/in/akash-suresh-53850a326/
-
-📧 Email: akashscontact7@gmail.com
-
-⭐ Portfolio V2 is actively under development and will continue evolving with new AI, Machine Learning, Cloud, and Full-Stack projects.
-⭐ This repository will be actively updated as Portfolio V2 evolves.
+```
