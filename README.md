@@ -140,14 +140,15 @@ portfolio-v2/
 
 ---
 
-## 📬 Connect
+📬 Connect
 
-Portfolio: Coming Soon
+🌐 Portfolio (V1): https://akashsuresh.me
 
-GitHub: https://github.com/AkashS-0107
+💻 GitHub: https://github.com/AkashS-0107
 
-LinkedIn: *(Will be updated after Portfolio V2 launch)*
+💼 LinkedIn: https://www.linkedin.com/in/akash-suresh-53850a326/
 
----
+📧 Email: akashscontact7@gmail.com
 
+⭐ Portfolio V2 is actively under development and will continue evolving with new AI, Machine Learning, Cloud, and Full-Stack projects.
 ⭐ This repository will be actively updated as Portfolio V2 evolves.
