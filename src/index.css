@@ -1,18 +1,21 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+@import "tailwindcss";
+
+:root{
+  color-scheme: dark;
 }
 
-html,
-body,
-#root {
-  width: 100%;
-  min-height: 100%;
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
 }
 
-body {
-  background: #0f172a;
-  color: #ffffff;
-  font-family: Inter, Arial, sans-serif;
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  background:#0B1120;
+  color:white;
+  font-family:Inter,sans-serif;
 }
