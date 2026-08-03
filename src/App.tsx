@@ -1,8 +1,9 @@
 function App() {
   return (
-    <main>
-      <h1>Portfolio V2 🚀</h1>
-      <p>Building my AI/ML Portfolio</p>
+    <main className="min-h-screen flex items-center justify-center bg-slate-950">
+      <h1 className="text-6xl font-bold text-cyan-400">
+        Tailwind Working 🚀
+      </h1>
     </main>
   );
 }
