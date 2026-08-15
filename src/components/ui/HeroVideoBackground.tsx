@@ -52,8 +52,10 @@ export const HeroVideoBackground: React.FC<HeroVideoBackgroundProps> = ({ classN
         entries.forEach((entry) => {
           if (!videoRef.current) return;
           if (entry.isIntersecting) {
-            videoRef.current.play().catch(() => {
-              // Browser autoplay policy catch
+            videoRef.current.play().catch((err) => {
+              if (import.meta.env.DEV) {
+                console.warn('[HeroVideoBackground] Playback error or autoplay restricted:', err);
+              }
             });
           } else {
             videoRef.current.pause();
@@ -92,7 +94,12 @@ export const HeroVideoBackground: React.FC<HeroVideoBackgroundProps> = ({ classN
           loop
           playsInline
           onLoadedData={() => setIsLoaded(true)}
-          onError={() => setHasError(true)}
+          onError={(e) => {
+            if (import.meta.env.DEV) {
+              console.error('[HeroVideoBackground] Video load error:', e);
+            }
+            setHasError(true);
+          }}
           className={`absolute inset-0 w-full h-full object-cover pointer-events-none transition-opacity duration-700 ease-out z-10 ${
             isLoaded ? 'opacity-100' : 'opacity-0'
           }`}
