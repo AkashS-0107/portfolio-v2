@@ -57,7 +57,7 @@ export const ProjectGalleryLightbox: React.FC<ProjectGalleryLightboxProps> = ({
           <Maximize2 className="w-4 h-4 text-[#C56A4A]" />
           <span className="font-semibold text-[#F4F4F6] uppercase font-heading">{activeImage.title}</span>
           <span className="text-[#9E9A93]">
-            ({currentIndex + 1} / {images.length})
+            {currentIndex + 1} of {images.length}
           </span>
         </div>
 

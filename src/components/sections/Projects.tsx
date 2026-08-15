@@ -80,8 +80,7 @@ export const Projects: React.FC<ProjectsProps> = ({
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Section Header & Category Filters with SectionTransitionLine */}
         <SectionTransitionLine
-          number="01"
-          title="Selected Work"
+          title="Projects"
           action={
             <div className="flex flex-wrap items-center gap-1.5 p-1 rounded bg-[#141418] border border-[#27272A]">
               {filterCategories.map((cat) => {
@@ -314,7 +313,7 @@ export const Projects: React.FC<ProjectsProps> = ({
                               key={ws.id}
                               className="p-2 rounded bg-[#09090B] border border-[#27272A] text-xs font-mono-tech text-[#F4F4F6]"
                             >
-                              <span className="text-[#C56A4A] font-bold mr-1.5">{ws.number}</span>
+                              <span className="text-[#C56A4A] font-bold mr-1.5">{ws.number.replace(/^0/, '')}</span>
                               <span>{ws.title}</span>
                             </div>
                           ))}

@@ -169,9 +169,8 @@ export const CertificateRoulette: React.FC = () => {
 
         {/* Counter and Navigation controls */}
         <div className="flex items-center gap-4">
-          {/* Counter: Clean 01 / 05 format */}
           <div className="px-3.5 py-1.5 rounded bg-[#141418] border border-[#27272A] text-[#C56A4A] text-xs font-mono-tech font-bold">
-            {String(activeIndex + 1).padStart(2, '0')} / {String(certifications.length).padStart(2, '0')}
+            {activeIndex + 1} of {certifications.length}
           </div>
 
           <div className="flex items-center gap-2">

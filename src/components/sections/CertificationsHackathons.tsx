@@ -16,8 +16,7 @@ export const CertificationsHackathons: React.FC = () => {
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Section Header with SectionTransitionLine */}
         <SectionTransitionLine
-          number="04"
-          title="Credentials & Proof"
+          title="Credentials"
           subtitle="A collection of verified certifications and hackathon experience, with the learning story behind each one."
         />
 

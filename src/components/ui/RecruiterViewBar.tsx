@@ -121,14 +121,14 @@ export const RecruiterViewBar: React.FC = () => {
                 onClick={() => setIsRecruiterMode(false)}
                 className="px-2.5 py-1 rounded bg-[#141418] border border-[#27272A] hover:border-[#C56A4A] text-[#9E9A93] hover:text-[#C56A4A] min-h-[44px] flex items-center"
               >
-                Internships <ChevronRight className="w-3 h-3 ml-1" />
+                Experience <ChevronRight className="w-3 h-3 ml-1" />
               </a>
               <a
                 href="#certifications-hackathons"
                 onClick={() => setIsRecruiterMode(false)}
                 className="px-2.5 py-1 rounded bg-[#141418] border border-[#27272A] hover:border-[#C56A4A] text-[#9E9A93] hover:text-[#C56A4A] min-h-[44px] flex items-center"
               >
-                Certifications <ChevronRight className="w-3 h-3 ml-1" />
+                Credentials <ChevronRight className="w-3 h-3 ml-1" />
               </a>
             </div>
           </div>

@@ -39,7 +39,7 @@ export const HeroEvidenceCarousel: React.FC = () => {
   const cards: CarouselCard[] = [
     {
       id: 'titan',
-      badge: '01 — FLAGSHIP PROJECT',
+      badge: 'FLAGSHIP PROJECT',
       status: 'FLAGSHIP',
       title: 'Titan Fitness Club',
       subtitle: 'Full-Stack Architecture & Frontend Engineering',
@@ -53,7 +53,7 @@ export const HeroEvidenceCarousel: React.FC = () => {
     },
     {
       id: 'worksure',
-      badge: '02 — VERIFIED WORK',
+      badge: 'VERIFIED WORK',
       status: 'COMPLETED',
       title: 'WorkSure',
       subtitle: 'UI/UX Revamp & Frontend Architecture',
@@ -77,7 +77,7 @@ export const HeroEvidenceCarousel: React.FC = () => {
     },
     {
       id: 'inamigos',
-      badge: '03 — WEBSITE REBUILD',
+      badge: 'WEBSITE REBUILD',
       status: 'COMPLETED',
       title: 'InAmigos Foundation',
       subtitle: 'UI/UX & Web Development Rebuild',
@@ -96,7 +96,7 @@ export const HeroEvidenceCarousel: React.FC = () => {
     },
     {
       id: 'future-pe',
-      badge: '04 — INTERNSHIP PROJECT',
+      badge: 'INTERNSHIP PROJECT',
       status: 'IN DEVELOPMENT',
       title: 'Future PE',
       subtitle: 'Prompt Engineering Internship',
@@ -217,7 +217,7 @@ export const HeroEvidenceCarousel: React.FC = () => {
               }`}
               aria-label={`Go to evidence slide ${idx + 1}`}
             >
-              0{idx + 1}
+              {idx + 1}
             </button>
           ))}
 

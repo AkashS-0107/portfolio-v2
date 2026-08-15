@@ -62,7 +62,7 @@ export const CertificateLightboxModal: React.FC<CertificateLightboxModalProps> =
 
   const formattedCounter =
     typeof currentIndex === 'number' && typeof totalCount === 'number' && totalCount > 0
-      ? `${String(currentIndex + 1).padStart(2, '0')} / ${String(totalCount).padStart(2, '0')}`
+      ? `${currentIndex + 1} of ${totalCount}`
       : null;
 
   return (

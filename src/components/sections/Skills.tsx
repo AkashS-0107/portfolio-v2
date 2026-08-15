@@ -53,7 +53,6 @@ export const Skills: React.FC<SkillsProps> = ({ onSelectProject }) => {
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Section Header with SectionTransitionLine */}
         <SectionTransitionLine
-          number="03"
           title="Skills & Technologies"
           action={
             <span className="text-xs font-mono-tech text-[#9E9A93] bg-[#141418] px-3 py-1.5 rounded border border-[#27272A]">

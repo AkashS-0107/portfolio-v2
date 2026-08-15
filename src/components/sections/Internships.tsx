@@ -12,7 +12,7 @@ export const Internships: React.FC = () => {
     <section id="internships" className="py-24 px-4 sm:px-6 lg:px-8 bg-[#09090B] relative scroll-mt-24">
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Section Header with SectionTransitionLine */}
-        <SectionTransitionLine number="02" title="Experience" />
+        <SectionTransitionLine title="Experience" />
 
         {/* Newspaper Ledger Engineering Timeline */}
         <div className="relative border-l border-[#27272A] ml-4 sm:ml-8 space-y-12 pl-6 sm:pl-10">

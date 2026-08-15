@@ -12,7 +12,7 @@ export const About: React.FC = () => {
     <section id="about" className="py-24 px-4 sm:px-6 lg:px-8 relative bg-[#09090B] scroll-mt-24">
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Section Header with SectionTransitionLine & Tubelight Electrical Ignition Reveal */}
-        <SectionTransitionLine number="05" title="About Akash" />
+        <SectionTransitionLine title="About Me" />
 
         <TubelightEffect className="p-5 rounded bg-[#141418] border border-[#27272A] shadow-xl">
           <div className="flex items-center gap-3">

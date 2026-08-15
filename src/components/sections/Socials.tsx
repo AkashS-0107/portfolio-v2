@@ -41,7 +41,7 @@ export const Socials: React.FC = () => {
     <section id="socials" className="py-24 px-4 sm:px-6 lg:px-8 bg-[#09090B] relative scroll-mt-24">
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Section Header with SectionTransitionLine */}
-        <SectionTransitionLine number="07" title="Profiles & Network" />
+        <SectionTransitionLine title="Profiles" />
 
         {/* 3-Column Professional Verification Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">

@@ -127,7 +127,7 @@ export const ProjectExplorerModal: React.FC<ProjectExplorerModalProps> = ({ proj
                         >
                           <div className="space-y-1.5">
                             <span className="font-mono-tech text-xs font-bold text-[#C56A4A]">
-                              {ws.number}
+                              {ws.number.replace(/^0/, '')}
                             </span>
                             <h4 className="font-heading text-sm font-bold text-[#F4F4F6]">
                               {ws.title}
@@ -137,7 +137,7 @@ export const ProjectExplorerModal: React.FC<ProjectExplorerModalProps> = ({ proj
                             </p>
                           </div>
                           <div className="pt-2 border-t border-[#27272A] text-[10px] font-mono-tech text-[#C56A4A] uppercase">
-                            Deliverable Track {ws.number}
+                            Deliverable Track {ws.number.replace(/^0/, '')}
                           </div>
                         </div>
                       ))}

@@ -48,9 +48,8 @@ export const Footer: React.FC = () => {
                 <a
                   key={item.id}
                   href={`#${item.id}`}
-                  className="hover:text-[#C56A4A] transition-colors py-1 flex items-center gap-1 min-h-[44px]"
+                  className="hover:text-[#C56A4A] transition-colors py-1 flex items-center min-h-[44px]"
                 >
-                  <span className="text-[#C56A4A]">#</span>
                   <span className="font-body text-[#9E9A93] hover:text-[#F4F4F6]">{item.label}</span>
                 </a>
               ))}
