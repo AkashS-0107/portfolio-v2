@@ -37,7 +37,7 @@ export const HeroCloudReveal: React.FC<HeroCloudRevealProps> = ({ isIntroActive 
   return (
     <div
       aria-hidden="true"
-      className="fixed inset-0 z-40 pointer-events-none overflow-hidden flex items-center justify-center bg-[#09090B]/60 backdrop-blur-[2px]"
+      className="fixed inset-0 z-25 pointer-events-none overflow-hidden flex items-center justify-center bg-[#09090B]/60 backdrop-blur-[2px]"
     >
       {/* Left Cloud Layer */}
       <div

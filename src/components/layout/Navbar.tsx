@@ -21,7 +21,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, onOpenCommandPale
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -38,41 +38,54 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, onOpenCommandPale
       <header
         className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
           scrolled
-            ? 'bg-[#09090B]/85 backdrop-blur-md border-b border-[#27272A]/50 py-3.5 shadow-xl'
-            : 'bg-transparent border-b border-transparent py-5'
+            ? 'bg-[#09090B]/90 backdrop-blur-md border-b border-[#27272A]/50 py-3 shadow-xl'
+            : 'bg-transparent border-b border-transparent py-4 sm:py-5'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          {/* Desktop Left Navigation */}
-          <nav className="hidden md:flex items-center gap-7" aria-label="Main Navigation">
-            {navItems.map((item) => {
-              const isActive = activeSection === item.id;
-              return (
-                <a
-                  key={item.id}
-                  href={`#${item.id}`}
-                  className={`relative py-1 font-heading text-xs uppercase tracking-widest font-medium transition-colors ${
-                    isActive
-                      ? 'text-[#F4F4F6]'
-                      : 'text-[#9E9A93] hover:text-[#F4F4F6]'
-                  }`}
-                >
-                  {item.label}
-                  {isActive && (
-                    <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#C56A4A] rounded-full animate-fadeIn" />
-                  )}
-                </a>
-              );
-            })}
-          </nav>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4 sm:gap-6">
+          {/* Brand Identity & Desktop Navigation */}
+          <div className="flex items-center gap-6 lg:gap-10 shrink-0">
+            {/* Compact Brand Treatment */}
+            <a
+              href="#hero"
+              className="font-heading font-semibold text-xs sm:text-sm tracking-wider uppercase text-[#F4F4F6] hover:text-[#C56A4A] transition-colors flex items-center gap-2 shrink-0 focus-visible:ring-2 focus-visible:ring-[#C56A4A] focus-visible:outline-none rounded px-1"
+              aria-label="Akash Suresh - Back to top"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-[#C56A4A]" />
+              <span>AKASH SURESH</span>
+            </a>
+
+            {/* Desktop Left Navigation */}
+            <nav className="hidden md:flex items-center gap-4 lg:gap-6 shrink-0" aria-label="Main Navigation">
+              {navItems.map((item) => {
+                const isActive = activeSection === item.id;
+                return (
+                  <a
+                    key={item.id}
+                    href={`#${item.id}`}
+                    className={`relative py-1 font-heading text-xs uppercase tracking-widest font-medium transition-colors whitespace-nowrap focus-visible:ring-2 focus-visible:ring-[#C56A4A] focus-visible:outline-none rounded px-1 ${
+                      isActive
+                        ? 'text-[#F4F4F6]'
+                        : 'text-[#9E9A93] hover:text-[#F4F4F6]'
+                    }`}
+                  >
+                    {item.label}
+                    {isActive && (
+                      <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#C56A4A] rounded-full animate-fadeIn" />
+                    )}
+                  </a>
+                );
+              })}
+            </nav>
+          </div>
 
           {/* Desktop Right Actions: GitHub, LinkedIn, Resume (when available), Search */}
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-4 lg:gap-6 shrink-0">
             <a
               href={github}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-heading text-xs uppercase tracking-widest text-[#9E9A93] hover:text-[#F4F4F6] transition-colors"
+              className="font-heading text-xs uppercase tracking-widest text-[#9E9A93] hover:text-[#F4F4F6] transition-colors whitespace-nowrap focus-visible:ring-2 focus-visible:ring-[#C56A4A] focus-visible:outline-none rounded px-1"
             >
               GitHub
             </a>
@@ -80,7 +93,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, onOpenCommandPale
               href={linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-heading text-xs uppercase tracking-widest text-[#9E9A93] hover:text-[#F4F4F6] transition-colors"
+              className="font-heading text-xs uppercase tracking-widest text-[#9E9A93] hover:text-[#F4F4F6] transition-colors whitespace-nowrap focus-visible:ring-2 focus-visible:ring-[#C56A4A] focus-visible:outline-none rounded px-1"
             >
               LinkedIn
             </a>
@@ -89,7 +102,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, onOpenCommandPale
                 href={resume}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-heading text-xs uppercase tracking-widest text-[#C56A4A] hover:text-[#E08A68] transition-colors flex items-center gap-1.5"
+                className="font-heading text-xs uppercase tracking-widest text-[#C56A4A] hover:text-[#E08A68] transition-colors flex items-center gap-1.5 whitespace-nowrap focus-visible:ring-2 focus-visible:ring-[#C56A4A] focus-visible:outline-none rounded px-1"
               >
                 <FileDown className="w-3.5 h-3.5 text-[#C56A4A]" />
                 <span>Resume</span>
@@ -100,7 +113,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, onOpenCommandPale
               <button
                 type="button"
                 onClick={onOpenCommandPalette}
-                className="p-2 rounded text-[#9E9A93] hover:text-[#C56A4A] hover:bg-[#141418] transition-colors focus:outline-none focus:ring-1 focus:ring-[#C56A4A]"
+                className="p-2 rounded text-[#9E9A93] hover:text-[#C56A4A] hover:bg-[#141418] transition-colors focus:outline-none focus:ring-1 focus:ring-[#C56A4A] min-h-[36px] min-w-[36px] flex items-center justify-center"
                 aria-label="Open Command Palette"
                 title="Search (⌘K)"
               >
@@ -111,18 +124,23 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, onOpenCommandPale
 
           {/* Mobile Header Bar */}
           <div className="md:hidden flex items-center justify-between w-full">
-            {/* Minimal left visual space (No name repeated) */}
-            <div className="flex items-center gap-2">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#C56A4A]/80" />
-            </div>
+            {/* Compact Mobile Brand Name */}
+            <a
+              href="#hero"
+              className="font-heading font-semibold text-xs tracking-wider uppercase text-[#F4F4F6] hover:text-[#C56A4A] transition-colors flex items-center gap-2 focus-visible:ring-2 focus-visible:ring-[#C56A4A] focus-visible:outline-none rounded px-1"
+              aria-label="Akash Suresh - Back to top"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-[#C56A4A]" />
+              <span>AKASH SURESH</span>
+            </a>
 
-            {/* Right: Menu trigger & Search */}
+            {/* Right: Search & Mobile Menu Trigger */}
             <div className="flex items-center gap-2">
               {onOpenCommandPalette && (
                 <button
                   type="button"
                   onClick={onOpenCommandPalette}
-                  className="p-2 rounded text-[#9E9A93] hover:text-[#C56A4A] focus:outline-none min-h-[44px] min-w-[44px] flex items-center justify-center"
+                  className="p-2 rounded text-[#9E9A93] hover:text-[#C56A4A] focus:outline-none min-h-[44px] min-w-[44px] flex items-center justify-center focus-visible:ring-2 focus-visible:ring-[#C56A4A]"
                   aria-label="Open Command Palette"
                 >
                   <Search className="w-5 h-5" />
@@ -132,7 +150,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, onOpenCommandPale
               <button
                 type="button"
                 onClick={toggleMobileMenu}
-                className="px-3.5 py-2 rounded border border-[#27272A] text-[#F4F4F6] hover:border-[#C56A4A] font-heading text-xs font-semibold tracking-wider transition-colors min-h-[44px] flex items-center gap-2"
+                className="px-3.5 py-2 rounded border border-[#27272A] text-[#F4F4F6] hover:border-[#C56A4A] font-heading text-xs font-semibold tracking-wider transition-colors min-h-[44px] flex items-center gap-2 focus-visible:ring-2 focus-visible:ring-[#C56A4A] focus-visible:outline-none"
                 aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
                 aria-expanded={isMobileMenuOpen}
               >
@@ -154,3 +172,4 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, onOpenCommandPale
     </>
   );
 };
+
