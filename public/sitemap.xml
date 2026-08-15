@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+  PORTFOLIO V2 — SITEMAP TEMPLATE
+  NOTE: Production domain is required to emit canonical loc URLs.
+  Update the <loc> tag below once your custom production domain is connected.
+-->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!--
+  <url>
+    <loc>https://<your-production-domain>/</loc>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  -->
+</urlset>

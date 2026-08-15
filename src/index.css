@@ -1,21 +1,267 @@
 @import "tailwindcss";
 
-:root{
-  color-scheme: dark;
+:root {
+  /* Primitive Color Tokens */
+  --raw-obsidian: #09090b;
+  --raw-charcoal-dark: #141418;
+  --raw-charcoal-card: #18181f;
+  --raw-grey-border: #27272a;
+  --raw-grey-muted-border: #33333c;
+  --raw-offwhite: #f4f4f6;
+  --raw-grey-text: #a1a1aa;
+  --raw-grey-muted-text: #71717a;
+  --raw-copper: #c56a4a;
+  --raw-copper-hover: #e08a68;
+  --raw-copper-deep: #9e4f39;
+  --raw-mint: #10b981;
+  --raw-terracotta: #e05a47;
+
+  /* Semantic Color Tokens */
+  --bg-base: var(--raw-obsidian);
+  --bg-surface: var(--raw-charcoal-dark);
+  --bg-surface-elevated: var(--raw-charcoal-card);
+  --text-primary: var(--raw-offwhite);
+  --text-secondary: var(--raw-grey-text);
+  --text-muted: var(--raw-grey-muted-text);
+  --border-hairline: var(--raw-grey-border);
+  --border-subtle: var(--raw-grey-muted-border);
+  --accent-primary: var(--raw-copper);
+  --accent-secondary: var(--raw-copper-deep);
+  --color-success: var(--raw-mint);
+  --color-warning: var(--raw-terracotta);
+  --color-focus: var(--raw-copper);
+  --color-selection: var(--raw-copper);
+
+  /* Typography Tokens */
+  --font-display: 'Newsreader', Georgia, serif;
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Motion & Radius Tokens */
+  --radius-subtle: 4px;
+  --radius-md: 8px;
+  --motion-duration-fast: 150ms;
+  --motion-duration-normal: 300ms;
+  --motion-easing-editorial: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
+@theme {
+  --font-serif: var(--font-display);
+  --font-heading: var(--font-heading);
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-mono);
+
+  --color-obsidian: #09090b;
+  --color-surface-dark: #141418;
+  --color-surface-card: #18181f;
+  --color-hairline: #27272a;
+  --color-hairline-subtle: #33333c;
+  --color-copper-accent: #c56a4a;
+  --color-copper-hover: #e08a68;
+  --color-copper-deep: #9e4f39;
+  --color-mint-accent: #10b981;
+  --color-terracotta-accent: #e05a47;
 }
 
-html{
-  scroll-behavior:smooth;
+@layer base {
+  *,
+  ::after,
+  ::before {
+    box-sizing: border-box;
+  }
+
+  ::selection {
+    background-color: var(--color-selection);
+    color: var(--bg-base);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--bg-base);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    overflow-x: hidden;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.02em;
+  }
 }
 
-body{
-  background:#0B1120;
-  color:white;
-  font-family:Inter,sans-serif;
+/* Typography Utility Classes */
+.font-display {
+  font-family: var(--font-display);
 }
+
+.font-heading {
+  font-family: var(--font-heading);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+.font-mono-tech {
+  font-family: var(--font-mono);
+}
+
+/* Editorial Drop Cap */
+.editorial-dropcap::first-letter {
+  font-family: var(--font-display);
+  font-size: 3.5rem;
+  line-height: 0.85;
+  float: left;
+  margin-right: 0.75rem;
+  margin-top: 0.15rem;
+  color: var(--accent-primary);
+  font-weight: 600;
+}
+
+/* Custom subtle obsidian scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-base);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-hairline);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-primary);
+}
+
+/* Subtle Technical Grid Background */
+.bg-grid-hairline {
+  background-size: 40px 40px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+/* Keyframes & Utilities */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes clipRevealUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.animate-clipRevealUp {
+  animation: clipRevealUp 800ms var(--motion-easing-editorial) forwards;
+}
+
+.animate-fadeIn {
+  animation: fadeIn var(--motion-duration-normal) var(--motion-easing-editorial) forwards;
+}
+
+.animate-fadeInUp {
+  animation: fadeInUp 600ms var(--motion-easing-editorial) forwards;
+}
+
+.animate-scaleIn {
+  animation: scaleIn 300ms var(--motion-easing-editorial) forwards;
+}
+
+/* Stagger Delays for Hero Entrance */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-600 { animation-delay: 600ms; }
+.delay-700 { animation-delay: 700ms; }
+.delay-800 { animation-delay: 800ms; }
+
+/* Micro-Interaction Utilities */
+.hover-underline-grow {
+  position: relative;
+}
+.hover-underline-grow::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: var(--accent-primary);
+  transition: width 250ms var(--motion-easing-editorial);
+}
+.hover-underline-grow:hover::after {
+  width: 100%;
+}
+
+.card-elevation-hover {
+  transition: transform 300ms var(--motion-easing-editorial), border-color 300ms ease, box-shadow 300ms ease;
+}
+.card-elevation-hover:hover {
+  transform: translateY(-2px);
+  border-color: rgba(197, 106, 74, 0.4);
+  box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
+
+

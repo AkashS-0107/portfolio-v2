@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+# Sitemap URL requirement:
+# Uncomment and update the line below once your verified production domain is connected:
+# Sitemap: https://<your-production-domain>/sitemap.xml
