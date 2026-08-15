@@ -3,12 +3,14 @@ import React, { useEffect, useState, useRef } from 'react';
 export const CustomCursor: React.FC = () => {
   const cursorDotRef = useRef<HTMLDivElement>(null);
   const cursorRingRef = useRef<HTMLDivElement>(null);
-  const [cursorState, setCursorState] = useState<'default' | 'interactive' | 'view'>('default');
+  const [cursorState, setCursorState] = useState<'default' | 'interactive' | 'view' | 'link'>('default');
   const [isEnabled] = useState(() => {
     if (typeof window === 'undefined') return false;
     const hasFinePointer = window.matchMedia('(pointer: fine)').matches;
+    const isCoarsePointer = window.matchMedia('(pointer: coarse)').matches;
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    return hasFinePointer && !prefersReducedMotion;
+    const hasTouch = 'ontouchstart' in window;
+    return hasFinePointer && !isCoarsePointer && !prefersReducedMotion && !hasTouch;
   });
 
   // Position refs for lerp smoothing
@@ -32,13 +34,18 @@ export const CustomCursor: React.FC = () => {
       const target = e.target as HTMLElement | null;
       if (!target) return;
 
-      const viewTarget = target.closest('[data-cursor="view"], .group\\/img, .group\\/link, [role="img"]');
+      const viewTarget = target.closest('[data-cursor="view"], .group\\/img, [role="img"]');
+      const linkTarget = target.closest(
+        '[data-cursor="link"], a[target="_blank"], a[href^="http"], a[href^="mailto:"]'
+      );
       const interactiveTarget = target.closest(
         'button, a, input, select, textarea, [role="button"], [tabindex]:not([tabindex="-1"])'
       );
 
       if (viewTarget) {
         setCursorState('view');
+      } else if (linkTarget) {
+        setCursorState('link');
       } else if (interactiveTarget) {
         setCursorState('interactive');
       } else {
@@ -79,7 +86,7 @@ export const CustomCursor: React.FC = () => {
       <div
         ref={cursorDotRef}
         className={`fixed top-0 left-0 -translate-x-1/2 -translate-y-1/2 rounded-full transition-opacity duration-200 ${
-          cursorState === 'view'
+          cursorState === 'view' || cursorState === 'link'
             ? 'w-1.5 h-1.5 bg-[#C56A4A] opacity-80'
             : cursorState === 'interactive'
             ? 'w-2 h-2 bg-[#C56A4A] opacity-90'
@@ -91,8 +98,8 @@ export const CustomCursor: React.FC = () => {
       <div
         ref={cursorRingRef}
         className={`fixed top-0 left-0 -translate-x-1/2 -translate-y-1/2 rounded-full border transition-all duration-300 ease-out flex items-center justify-center ${
-          cursorState === 'view'
-            ? 'w-12 h-12 border-[#C56A4A] bg-[#09090B]/80 shadow-lg scale-100'
+          cursorState === 'view' || cursorState === 'link'
+            ? 'w-12 h-12 border-[#C56A4A] bg-[#09090B]/85 shadow-lg scale-100'
             : cursorState === 'interactive'
             ? 'w-8 h-8 border-[#C56A4A]/70 bg-[#C56A4A]/10 scale-100'
             : 'w-6 h-6 border-[#71717A]/40 bg-transparent scale-90'
@@ -101,6 +108,11 @@ export const CustomCursor: React.FC = () => {
         {cursorState === 'view' && (
           <span className="font-mono-tech text-[9px] font-bold tracking-widest text-[#C56A4A] uppercase">
             VIEW
+          </span>
+        )}
+        {cursorState === 'link' && (
+          <span className="font-mono-tech text-[9px] font-bold tracking-widest text-[#C56A4A] uppercase">
+            LINK
           </span>
         )}
       </div>

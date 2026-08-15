@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ArrowDown, Mail, FileDown } from 'lucide-react';
 import { portfolioData } from '../../data/portfolioData';
 import { HeroCloudReveal } from '../ui/HeroCloudReveal';
@@ -6,6 +6,7 @@ import { HeroEvidenceCarousel } from './HeroEvidenceCarousel';
 import { AtmosphericBackground } from '../ui/AtmosphericBackground';
 import { useResumeAvailable } from '../../hooks/useResumeAvailable';
 import { GithubIcon, LinkedinIcon } from '../ui/Icons';
+import { ScrollReveal } from '../ui/ScrollReveal';
 
 interface HeroProps {
   onOpenCommandPalette?: () => void;
@@ -14,8 +15,45 @@ interface HeroProps {
 export const Hero: React.FC<HeroProps> = () => {
   const { bio, professionalLinks } = portfolioData;
   const isResumeAvailable = useResumeAvailable();
-
   const { github, linkedin, email, resume } = professionalLinks;
+
+  const [scrollOffsetY, setScrollOffsetY] = useState(0);
+  const [allowParallax] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = window.innerWidth < 768 || window.matchMedia('(pointer: coarse)').matches;
+    return !prefersReducedMotion && !isMobile;
+  });
+
+  useEffect(() => {
+    if (!allowParallax) return;
+
+    let ticking = false;
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          // Cap upward movement to 30px max
+          const scrollY = window.scrollY;
+          if (scrollY < 800) {
+            setScrollOffsetY(Math.min(scrollY * 0.12, 30));
+          }
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [allowParallax]);
+
+  const heroStyle = allowParallax
+    ? {
+        transform: `translateY(-${scrollOffsetY}px)`,
+        opacity: Math.max(1 - scrollOffsetY / 120, 0.7),
+        transition: 'transform 0.1s ease-out, opacity 0.1s ease-out',
+      }
+    : {};
 
   return (
     <section
@@ -31,8 +69,11 @@ export const Hero: React.FC<HeroProps> = () => {
       {/* Subtle Hairline Grid Background */}
       <div className="absolute inset-0 bg-grid-hairline opacity-20 pointer-events-none z-0" />
 
-      {/* Hero Content Container — z-30 layer */}
-      <div className="relative max-w-5xl mx-auto w-full text-center space-y-8 z-30">
+      {/* Hero Content Container — z-30 layer with subtle scroll receding motion */}
+      <div
+        className="relative max-w-5xl mx-auto w-full text-center space-y-8 z-30"
+        style={heroStyle}
+      >
         {/* Central Primary Name — Headline Anchor */}
         <div className="space-y-4">
           <div className="overflow-hidden">
@@ -108,9 +149,9 @@ export const Hero: React.FC<HeroProps> = () => {
         </div>
 
         {/* Large Evidence Visual System Carousel */}
-        <div className="animate-fadeInUp delay-700">
+        <ScrollReveal variant="fade-up" delay={200}>
           <HeroEvidenceCarousel />
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );

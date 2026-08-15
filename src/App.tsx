@@ -14,6 +14,8 @@ import { navItems } from './data/navigation';
 import { RecruiterViewBar } from './components/ui/RecruiterViewBar';
 import { CommandPalette } from './components/ui/CommandPalette';
 import { CustomCursor } from './components/ui/CustomCursor';
+import { ScrollProgressIndicator } from './components/ui/ScrollProgressIndicator';
+import { BackToTop } from './components/ui/BackToTop';
 
 export function App() {
   const sectionIds = ['hero', ...navItems.map((item) => item.id)];
@@ -44,6 +46,9 @@ export function App() {
 
   return (
     <div className="min-h-screen bg-[#09090B] text-slate-100 font-sans selection:bg-[#C56A4A]/30 selection:text-[#F4F4F6]">
+      {/* Scroll Progress Bar (Desktop right vertical line / Mobile top horizontal line) */}
+      <ScrollProgressIndicator />
+
       {/* Sticky Header Navigation */}
       <Navbar
         activeSection={activeSection}
@@ -82,6 +87,9 @@ export function App() {
 
       {/* 9. FOOTER */}
       <Footer />
+
+      {/* Back To Top Action */}
+      <BackToTop />
 
       {/* Recruiter Experience Floating Bar */}
       <RecruiterViewBar />
