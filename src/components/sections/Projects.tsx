@@ -36,14 +36,18 @@ const statusBadges: Record<
 
 const filterCategories = ['ALL', 'FULL STACK', 'WEB', 'AI / ML'] as const;
 
+import type { ActiveHoveredSkill } from '../../App';
+
 interface ProjectsProps {
   externalSelectedProjectId?: string | null;
   onClearExternalSelectedProject?: () => void;
+  activeHoveredSkill?: ActiveHoveredSkill | null;
 }
 
 export const Projects: React.FC<ProjectsProps> = ({
   externalSelectedProjectId,
   onClearExternalSelectedProject,
+  activeHoveredSkill,
 }) => {
   const { projects } = portfolioData;
   const [internalSelectedProject, setInternalSelectedProject] = useState<Project | null>(null);
@@ -58,6 +62,31 @@ export const Projects: React.FC<ProjectsProps> = ({
   const handleCloseModal = () => {
     setInternalSelectedProject(null);
     if (onClearExternalSelectedProject) onClearExternalSelectedProject();
+  };
+
+  const checkProjectMatch = (project: Project): boolean | null => {
+    if (!activeHoveredSkill) return null;
+    if (activeHoveredSkill.relatedProjects.includes(project.id)) return true;
+    return project.technologies.some(
+      (t) =>
+        t.toLowerCase().includes(activeHoveredSkill.skillName.toLowerCase()) ||
+        activeHoveredSkill.skillName.toLowerCase().includes(t.toLowerCase())
+    );
+  };
+
+  const getRelationshipClass = (project: Project): string => {
+    const isMatch = checkProjectMatch(project);
+    if (isMatch === true) return 'project-card-relationship is-highlighted';
+    if (isMatch === false) return 'project-card-relationship is-dimmed';
+    return 'project-card-relationship';
+  };
+
+  const handleImageMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    const y = (e.clientY - rect.top) / rect.height;
+    e.currentTarget.style.setProperty('--mouse-x-norm', String(x));
+    e.currentTarget.style.setProperty('--mouse-y-norm', String(y));
   };
 
   const filteredProjects = projects.filter((p) => {
@@ -76,7 +105,13 @@ export const Projects: React.FC<ProjectsProps> = ({
   const standardProjects = filteredProjects.filter((p) => !p.isFlagship);
 
   return (
-    <section id="projects" className="py-24 px-4 sm:px-6 lg:px-8 bg-[#09090B] relative scroll-mt-24">
+    <section
+      id="projects"
+      data-trig
+      data-trig-var="true"
+      data-trig-pixels="true"
+      className="py-24 px-4 sm:px-6 lg:px-8 bg-[#09090B] relative scroll-mt-24"
+    >
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Section Header & Category Filters with SectionTransitionLine */}
         <SectionTransitionLine
@@ -104,10 +139,25 @@ export const Projects: React.FC<ProjectsProps> = ({
           }
         />
 
+        {/* Active Skill Filter Relationship Indicator Banner */}
+        {activeHoveredSkill && (
+          <div className="p-3 rounded-lg bg-[#141418] border border-[#C56A4A]/50 text-[#C56A4A] font-mono-tech text-xs flex items-center justify-between animate-fadeIn">
+            <span className="flex items-center gap-2 font-semibold">
+              <Sparkles className="w-4 h-4 text-[#C56A4A]" />
+              Highlighting projects using skill: <strong className="text-[#F4F4F6] underline">{activeHoveredSkill.skillName}</strong>
+            </span>
+            <span className="text-[10px] text-[#9E9A93] uppercase">Interactive Focus</span>
+          </div>
+        )}
+
         {/* 1. Flagship Project (Titan Fitness Club) */}
         {flagshipProject && (
           <ScrollReveal variant="fade-up" delay={60}>
-            <div className="relative rounded bg-[#141418] border-l-4 border-[#C56A4A] border-y border-r border-[#27272A] p-6 sm:p-10 shadow-2xl overflow-hidden group">
+            <div
+              className={`relative rounded bg-[#141418] border-l-4 border-[#C56A4A] border-y border-r border-[#27272A] p-6 sm:p-10 shadow-2xl overflow-hidden group ${getRelationshipClass(
+                flagshipProject
+              )}`}
+            >
               {/* Flagship Indicator Ribbon */}
               <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-[#09090B] border border-[#C56A4A]/40 text-[#C56A4A] font-mono-tech text-xs font-bold tracking-widest uppercase">
@@ -151,21 +201,26 @@ export const Projects: React.FC<ProjectsProps> = ({
                   </div>
                 </div>
 
-                {/* Hero Image preview with scale reveal & un-tinted crisp visual */}
+                {/* Hero Image preview with scale reveal & desktop physics */}
                 {flagshipProject.heroImage && (
                   <ScrollReveal variant="scale" delay={120} className="lg:col-span-5">
                     <div
                       data-cursor="view"
-                      className="relative rounded overflow-hidden border border-[#27272A] bg-[#09090B] group/img shadow-xl cursor-pointer"
+                      onMouseMove={handleImageMouseMove}
+                      className="relative rounded overflow-hidden border border-[#27272A] bg-[#09090B] group/img shadow-xl cursor-pointer project-image-interactive"
+                      style={{ transform: 'translateY(calc(var(--trig-px, 0px) * -0.025))' }}
                       onClick={() => setInternalSelectedProject(flagshipProject)}
                     >
                       <img
                         src={flagshipProject.heroImage}
                         alt="Titan Fitness Club Approved Public Hero Visual"
-                        className="w-full h-60 sm:h-64 object-cover object-top transition-transform duration-500 group-hover/img:scale-[1.02]"
+                        className="w-full h-60 sm:h-64 object-cover object-top transition-transform duration-500 group-hover/img:scale-[1.025]"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-[#09090B]/60 via-transparent to-transparent opacity-60 pointer-events-none" />
-                      <div className="absolute bottom-4 left-4 right-4 flex items-center justify-end">
+                      <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-[#09090B]/90 border border-[#C56A4A]/40 text-[#C56A4A] font-mono-tech text-[10px] font-bold">
+                          ● PUBLIC HERO
+                        </span>
                         <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded bg-[#C56A4A] text-[#09090B] font-mono-tech text-xs font-bold shadow-xl opacity-90 sm:opacity-0 sm:group-hover/img:opacity-100 transition-all duration-300 transform group-hover/img:translate-y-0 translate-y-1">
                           <Eye className="w-3.5 h-3.5" />
                           <span>EXPLORE PROJECT</span>
@@ -221,7 +276,11 @@ export const Projects: React.FC<ProjectsProps> = ({
                 staggerStep={80}
                 delay={160}
               >
-                <div className="flex flex-col justify-between h-full p-6 rounded bg-[#141418] border border-[#27272A] card-elevation-hover transition-all group shadow-xl">
+                <div
+                  className={`flex flex-col justify-between h-full p-6 rounded bg-[#141418] border border-[#27272A] card-elevation-hover transition-all group shadow-xl ${getRelationshipClass(
+                    project
+                  )}`}
+                >
                   <div>
                     {/* Status & Category */}
                     <div className="flex items-center justify-between gap-2 mb-4">
@@ -255,13 +314,15 @@ export const Projects: React.FC<ProjectsProps> = ({
                       project.heroImage && (
                         <div
                           data-cursor="view"
+                          onMouseMove={handleImageMouseMove}
                           onClick={() => setInternalSelectedProject(project)}
-                          className="mb-4 rounded overflow-hidden border border-[#27272A] h-40 bg-[#09090B] cursor-pointer group/img transition-colors relative"
+                          className="mb-4 rounded overflow-hidden border border-[#27272A] h-40 bg-[#09090B] cursor-pointer group/img transition-colors relative project-image-interactive"
+                          style={{ transform: 'translateY(calc(var(--trig-px, 0px) * -0.025))' }}
                         >
                           <img
                             src={project.heroImage}
                             alt={project.title}
-                            className="w-full h-full object-cover object-top transition-transform duration-500 group-hover/img:scale-[1.02]"
+                            className="w-full h-full object-cover object-top transition-transform duration-500 group-hover/img:scale-[1.025]"
                           />
                           <div className="absolute inset-0 bg-[#09090B]/30 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
                             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#09090B]/90 border border-[#C56A4A]/60 text-[#C56A4A] font-mono-tech text-[11px] font-bold shadow-lg transform translate-y-1 group-hover/img:translate-y-0 transition-transform duration-300">

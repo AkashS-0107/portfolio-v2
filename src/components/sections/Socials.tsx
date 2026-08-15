@@ -38,7 +38,12 @@ export const Socials: React.FC = () => {
     .filter((s): s is typeof s & { targetUrl: string } => Boolean(s.targetUrl));
 
   return (
-    <section id="socials" className="py-24 px-4 sm:px-6 lg:px-8 bg-[#09090B] relative scroll-mt-24">
+    <section
+      id="socials"
+      data-trig
+      data-trig-var="true"
+      className="py-24 px-4 sm:px-6 lg:px-8 bg-[#09090B] relative scroll-mt-24"
+    >
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Section Header with SectionTransitionLine */}
         <SectionTransitionLine title="Profiles" />

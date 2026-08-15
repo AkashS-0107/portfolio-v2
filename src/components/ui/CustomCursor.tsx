@@ -3,7 +3,7 @@ import React, { useEffect, useState, useRef } from 'react';
 export const CustomCursor: React.FC = () => {
   const cursorDotRef = useRef<HTMLDivElement>(null);
   const cursorRingRef = useRef<HTMLDivElement>(null);
-  const [cursorState, setCursorState] = useState<'default' | 'interactive' | 'view' | 'link'>('default');
+  const [cursorState, setCursorState] = useState<'default' | 'interactive' | 'view' | 'inspect' | 'drag' | 'link'>('default');
   const [isEnabled] = useState(() => {
     if (typeof window === 'undefined') return false;
     const hasFinePointer = window.matchMedia('(pointer: fine)').matches;
@@ -34,15 +34,21 @@ export const CustomCursor: React.FC = () => {
       const target = e.target as HTMLElement | null;
       if (!target) return;
 
-      const viewTarget = target.closest('[data-cursor="view"], .group\\/img, [role="img"]');
+      const inspectTarget = target.closest('[data-cursor="inspect"]');
+      const dragTarget = target.closest('[data-cursor="drag"], .cursor-grab, .cursor-grabbing');
+      const viewTarget = target.closest('[data-cursor="view"], .group\\/img');
       const linkTarget = target.closest(
-        '[data-cursor="link"], a[target="_blank"], a[href^="http"], a[href^="mailto:"]'
+        '[data-cursor="link"], a[target="_blank"], a[href^="http"]'
       );
       const interactiveTarget = target.closest(
         'button, a, input, select, textarea, [role="button"], [tabindex]:not([tabindex="-1"])'
       );
 
-      if (viewTarget) {
+      if (inspectTarget) {
+        setCursorState('inspect');
+      } else if (dragTarget) {
+        setCursorState('drag');
+      } else if (viewTarget) {
         setCursorState('view');
       } else if (linkTarget) {
         setCursorState('link');
@@ -80,13 +86,15 @@ export const CustomCursor: React.FC = () => {
 
   if (!isEnabled) return null;
 
+  const isBadgeState = ['view', 'inspect', 'drag', 'link'].includes(cursorState);
+
   return (
     <div className="pointer-events-none fixed inset-0 z-[9999] overflow-hidden aria-hidden" aria-hidden="true">
       {/* Subtle Inner Dot */}
       <div
         ref={cursorDotRef}
         className={`fixed top-0 left-0 -translate-x-1/2 -translate-y-1/2 rounded-full transition-opacity duration-200 ${
-          cursorState === 'view' || cursorState === 'link'
+          isBadgeState
             ? 'w-1.5 h-1.5 bg-[#C56A4A] opacity-80'
             : cursorState === 'interactive'
             ? 'w-2 h-2 bg-[#C56A4A] opacity-90'
@@ -98,8 +106,8 @@ export const CustomCursor: React.FC = () => {
       <div
         ref={cursorRingRef}
         className={`fixed top-0 left-0 -translate-x-1/2 -translate-y-1/2 rounded-full border transition-all duration-300 ease-out flex items-center justify-center ${
-          cursorState === 'view' || cursorState === 'link'
-            ? 'w-12 h-12 border-[#C56A4A] bg-[#09090B]/85 shadow-lg scale-100'
+          isBadgeState
+            ? 'w-14 h-14 border-[#C56A4A] bg-[#09090B]/90 shadow-xl scale-100'
             : cursorState === 'interactive'
             ? 'w-8 h-8 border-[#C56A4A]/70 bg-[#C56A4A]/10 scale-100'
             : 'w-6 h-6 border-[#71717A]/40 bg-transparent scale-90'
@@ -110,9 +118,19 @@ export const CustomCursor: React.FC = () => {
             VIEW
           </span>
         )}
-        {cursorState === 'link' && (
+        {cursorState === 'inspect' && (
           <span className="font-mono-tech text-[9px] font-bold tracking-widest text-[#C56A4A] uppercase">
-            LINK
+            INSPECT
+          </span>
+        )}
+        {cursorState === 'drag' && (
+          <span className="font-mono-tech text-[9px] font-bold tracking-widest text-[#C56A4A] uppercase">
+            DRAG
+          </span>
+        )}
+        {cursorState === 'link' && (
+          <span className="font-mono-tech text-[11px] font-bold text-[#C56A4A]">
+            ↗
           </span>
         )}
       </div>

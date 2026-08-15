@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Trophy, ShieldCheck, CheckCircle2, Eye } from 'lucide-react';
 import { portfolioData } from '../../data/portfolioData';
 import type { Hackathon } from '../../types/portfolio';
-import { CertificateRoulette } from '../ui/CertificateRoulette';
+import { CertificateCoverflowDeck } from '../ui/CertificateCoverflowDeck';
 import { CertificateLightboxModal } from '../ui/CertificateLightboxModal';
 import { ScrollReveal } from '../ui/ScrollReveal';
 import { SectionTransitionLine } from '../ui/SectionTransitionLine';
@@ -12,7 +12,12 @@ export const CertificationsHackathons: React.FC = () => {
   const [activeHackathonCert, setActiveHackathonCert] = useState<Hackathon | null>(null);
 
   return (
-    <section id="certifications-hackathons" className="py-24 px-4 sm:px-6 lg:px-8 bg-[#09090B] relative scroll-mt-24">
+    <section
+      id="certifications-hackathons"
+      data-trig
+      data-trig-var="true"
+      className="py-24 px-4 sm:px-6 lg:px-8 bg-[#09090B] relative scroll-mt-24"
+    >
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Section Header with SectionTransitionLine */}
         <SectionTransitionLine
@@ -20,9 +25,9 @@ export const CertificationsHackathons: React.FC = () => {
           subtitle="A collection of verified certifications and hackathon experience, with the learning story behind each one."
         />
 
-        {/* 1. Immersive 5-Certificate Roulette Experience revealed as one visual object */}
+        {/* 1. Immersive 5-Certificate Coverflow Experience */}
         <ScrollReveal variant="fade-up" delay={80}>
-          <CertificateRoulette />
+          <CertificateCoverflowDeck />
         </ScrollReveal>
 
         {/* 2. Hackathons & Competitions Area (THREX Hackathon Separation) */}

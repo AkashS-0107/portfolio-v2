@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { FileDown, Mail, CheckCircle2, UserCheck, X, ChevronRight } from 'lucide-react';
 import { portfolioData } from '../../data/portfolioData';
+import { navItems } from '../../data/navigation';
 import { GithubIcon, LinkedinIcon } from './Icons';
 import { useResumeAvailable } from '../../hooks/useResumeAvailable';
 
@@ -109,27 +110,16 @@ export const RecruiterViewBar: React.FC = () => {
           <div className="pt-3 border-t border-[#27272A] space-y-1.5 text-[11px]">
             <span className="text-[#9E9A93] uppercase tracking-widest block text-[10px]">Quick Jump:</span>
             <div className="flex flex-wrap gap-1.5">
-              <a
-                href="#projects"
-                onClick={() => setIsRecruiterMode(false)}
-                className="px-2.5 py-1 rounded bg-[#141418] border border-[#27272A] hover:border-[#C56A4A] text-[#9E9A93] hover:text-[#C56A4A] min-h-[44px] flex items-center"
-              >
-                Projects <ChevronRight className="w-3 h-3 ml-1" />
-              </a>
-              <a
-                href="#internships"
-                onClick={() => setIsRecruiterMode(false)}
-                className="px-2.5 py-1 rounded bg-[#141418] border border-[#27272A] hover:border-[#C56A4A] text-[#9E9A93] hover:text-[#C56A4A] min-h-[44px] flex items-center"
-              >
-                Experience <ChevronRight className="w-3 h-3 ml-1" />
-              </a>
-              <a
-                href="#certifications-hackathons"
-                onClick={() => setIsRecruiterMode(false)}
-                className="px-2.5 py-1 rounded bg-[#141418] border border-[#27272A] hover:border-[#C56A4A] text-[#9E9A93] hover:text-[#C56A4A] min-h-[44px] flex items-center"
-              >
-                Credentials <ChevronRight className="w-3 h-3 ml-1" />
-              </a>
+              {navItems.map((item) => (
+                <a
+                  key={item.id}
+                  href={`#${item.id}`}
+                  onClick={() => setIsRecruiterMode(false)}
+                  className="px-2.5 py-1 rounded bg-[#141418] border border-[#27272A] hover:border-[#C56A4A] text-[#9E9A93] hover:text-[#C56A4A] min-h-[44px] flex items-center"
+                >
+                  {item.label} <ChevronRight className="w-3 h-3 ml-1" />
+                </a>
+              ))}
             </div>
           </div>
         </div>

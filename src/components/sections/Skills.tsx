@@ -16,14 +16,49 @@ const categoryIcons: Record<SkillCategory, React.ReactNode> = {
   'Tools & DevOps': <Layers className="w-4 h-4 text-[#C56A4A]" />,
 };
 
+import type { ActiveHoveredSkill } from '../../App';
+
 interface SkillsProps {
   onSelectProject?: (projectId: string) => void;
+  onHoverSkillChange?: (skill: ActiveHoveredSkill | null) => void;
 }
 
-export const Skills: React.FC<SkillsProps> = ({ onSelectProject }) => {
+export const Skills: React.FC<SkillsProps> = ({ onSelectProject, onHoverSkillChange }) => {
   const { skillGroups, skills, projects, certifications } = portfolioData;
   const [selectedSkill, setSelectedSkill] = useState<Skill | null>(null);
   const [hoverSkillId, setHoverSkillId] = useState<string | null>(null);
+
+  const handleMouseEnterSkill = (skill: Skill) => {
+    setHoverSkillId(skill.id);
+    if (!onHoverSkillChange) return;
+
+    // Find real projects matching this skill by technology name or explicit relatedProjects
+    const explicitProjectIds = skill.relatedProjects || [];
+    const implicitProjectIds = projects
+      .filter((p) =>
+        p.technologies.some(
+          (tech) =>
+            tech.toLowerCase().includes(skill.name.toLowerCase()) ||
+            skill.name.toLowerCase().includes(tech.toLowerCase())
+        )
+      )
+      .map((p) => p.id);
+
+    const uniqueProjectIds = Array.from(new Set([...explicitProjectIds, ...implicitProjectIds]));
+
+    onHoverSkillChange({
+      skillId: skill.id,
+      skillName: skill.name,
+      relatedProjects: uniqueProjectIds,
+    });
+  };
+
+  const handleMouseLeaveSkill = () => {
+    setHoverSkillId(null);
+    if (onHoverSkillChange) {
+      onHoverSkillChange(null);
+    }
+  };
 
   // Helper to summarize verified relationship for hover strip
   const getSkillEvidenceSummary = (skill: Skill) => {
@@ -49,19 +84,24 @@ export const Skills: React.FC<SkillsProps> = ({ onSelectProject }) => {
         }));
 
   return (
-    <section id="skills" className="py-24 px-4 sm:px-6 lg:px-8 bg-[#09090B] relative scroll-mt-24">
+    <section
+      id="skills"
+      data-trig
+      data-trig-var="true"
+      className="py-24 px-4 sm:px-6 lg:px-8 bg-[#09090B] relative scroll-mt-24"
+    >
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Section Header with SectionTransitionLine */}
         <SectionTransitionLine
           title="Skills & Technologies"
           action={
             <span className="text-xs font-mono-tech text-[#9E9A93] bg-[#141418] px-3 py-1.5 rounded border border-[#27272A]">
-              Select skill to inspect evidence
+              Hover/focus skill to illuminate projects
             </span>
           }
         />
 
-        {/* Categorized Skills System Grid (Grouped reveals to avoid individual pill motion) */}
+        {/* Categorized Skills System Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {groupsToDisplay.map((group, groupIdx) => (
             <ScrollReveal
@@ -90,24 +130,35 @@ export const Skills: React.FC<SkillsProps> = ({ onSelectProject }) => {
                   <div className="flex flex-wrap gap-2.5">
                     {group.skills.map((skill) => {
                       const isHovered = hoverSkillId === skill.id;
+                      const relatedProjectCount = projects.filter(
+                        (p) =>
+                          (skill.relatedProjects && skill.relatedProjects.includes(p.id)) ||
+                          p.technologies.some((t) => t.toLowerCase() === skill.name.toLowerCase())
+                      ).length;
+
                       return (
                         <button
                           key={skill.id}
                           type="button"
                           onClick={() => setSelectedSkill(skill)}
-                          onMouseEnter={() => setHoverSkillId(skill.id)}
-                          onMouseLeave={() => setHoverSkillId(null)}
-                          onFocus={() => setHoverSkillId(skill.id)}
-                          onBlur={() => setHoverSkillId(null)}
-                          className={`inline-flex items-center px-3 py-2 rounded font-mono-tech text-xs transition-all active:scale-95 focus:outline-none min-h-[44px] ${
+                          onMouseEnter={() => handleMouseEnterSkill(skill)}
+                          onMouseLeave={handleMouseLeaveSkill}
+                          onFocus={() => handleMouseEnterSkill(skill)}
+                          onBlur={handleMouseLeaveSkill}
+                          className={`skill-pill inline-flex items-center px-3 py-2 rounded font-mono-tech text-xs transition-all active:scale-95 focus:outline-none min-h-[44px] hover:-translate-y-0.5 focus:-translate-y-0.5 ${
                             isHovered
-                              ? 'bg-[#141418] border border-[#C56A4A] text-[#C56A4A] shadow-md'
+                              ? 'bg-[#141418] border border-[#C56A4A] text-[#C56A4A] shadow-md is-active'
                               : 'bg-[#09090B] border border-[#27272A] text-[#F4F4F6] hover:border-[#C56A4A]/60 hover:text-[#C56A4A]'
                           }`}
                         >
                           <span className="w-1.5 h-1.5 rounded-full bg-[#C56A4A] mr-2 shrink-0" />
                           <span>{skill.name}</span>
-                          <ExternalLink className="w-3 h-3 ml-2 text-[#9E9A93] group-hover/pill:text-[#C56A4A] transition-colors" />
+                          {relatedProjectCount > 0 && (
+                            <span className="ml-1.5 text-[9px] font-bold text-[#C56A4A] bg-[#141418] px-1.5 py-0.5 rounded border border-[#C56A4A]/30">
+                              {relatedProjectCount}
+                            </span>
+                          )}
+                          <ExternalLink className="w-3 h-3 ml-1.5 text-[#9E9A93] group-hover/pill:text-[#C56A4A] transition-colors" />
                         </button>
                       );
                     })}

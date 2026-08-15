@@ -46,16 +46,9 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 md:hidden flex flex-col bg-[#09090B] animate-fadeIn">
-      {/* Top Bar with Brand & Close Button */}
+      {/* Top Bar with Minimal Header & Close Button */}
       <div className="flex items-center justify-between p-6 border-b border-[#27272A]/50">
-        <a
-          href="#hero"
-          onClick={onClose}
-          className="flex items-center gap-2 font-heading text-xs uppercase tracking-wider text-[#F4F4F6] hover:text-[#C56A4A] transition-colors focus-visible:ring-2 focus-visible:ring-[#C56A4A] focus-visible:outline-none rounded px-1"
-        >
-          <span className="w-2 h-2 rounded-full bg-[#C56A4A]" />
-          <span>AKASH SURESH</span>
-        </a>
+        <div className="w-6" />
         <button
           type="button"
           onClick={onClose}

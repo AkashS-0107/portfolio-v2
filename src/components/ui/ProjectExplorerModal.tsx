@@ -3,6 +3,7 @@ import { X, ExternalLink, ShieldAlert, Code2, Layers, CheckCircle2, Eye, UserChe
 import type { Project } from '../../types/portfolio';
 import { GithubIcon } from './Icons';
 import { ProjectGalleryLightbox } from './ProjectGalleryLightbox';
+import { FanDeckCarousel } from './FanDeckCarousel';
 
 interface ProjectExplorerModalProps {
   project: Project | null;
@@ -13,6 +14,7 @@ interface ProjectExplorerModalProps {
 export const ProjectExplorerModal: React.FC<ProjectExplorerModalProps> = ({ project, isOpen, onClose }) => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [galleryCenterIndex, setGalleryCenterIndex] = useState(0);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -231,41 +233,35 @@ export const ProjectExplorerModal: React.FC<ProjectExplorerModalProps> = ({ proj
                   </div>
                 )}
 
-                {/* Evidence Image Gallery Grid */}
+                {/* Evidence Image Fan Deck Gallery */}
                 {project.evidenceImages && project.evidenceImages.length > 1 && (
                   <div className="space-y-3">
                     <div className="flex items-center justify-between border-b border-[#27272A] pb-2">
                       <h3 className="font-mono-tech text-xs font-semibold text-[#C56A4A] uppercase tracking-widest flex items-center gap-2">
                         <Layers className="w-4 h-4" />
-                        <span>PROJECT EVIDENCE GALLERY ({project.evidenceImages.length} SCREENSHOTS)</span>
+                        <span>PROJECT EVIDENCE FAN DECK ({project.evidenceImages.length} SCREENSHOTS)</span>
                       </h3>
-                      <span className="text-[#9E9A93] text-xs font-mono-tech">Click to enlarge</span>
+                      <span className="text-[#9E9A93] text-xs font-mono-tech">Drag / Swipe to browse • Click to inspect</span>
                     </div>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                      {project.evidenceImages.map((img, idx) => (
-                        <button
-                          key={img.title + idx}
-                          type="button"
-                          onClick={() => openLightboxAt(idx)}
-                          className="group relative rounded overflow-hidden border border-[#27272A] bg-[#141418] hover:border-[#C56A4A]/50 transition-all text-left focus:outline-none focus:ring-1 focus:ring-[#C56A4A]"
-                        >
-                          <img
-                            src={img.url}
-                            alt={img.title}
-                            className="w-full h-28 object-cover object-top group-hover:scale-105 transition-transform duration-300"
-                          />
-                          <div className="p-2 bg-[#09090B] border-t border-[#27272A]">
-                            <p className="font-mono-tech text-[11px] font-semibold text-[#F4F4F6] truncate">{img.title}</p>
-                            {img.type && (
-                              <span className="font-mono-tech text-[9px] text-[#C56A4A] uppercase tracking-wider">
-                                {img.type}
-                              </span>
-                            )}
-                          </div>
-                        </button>
-                      ))}
-                    </div>
+                    <FanDeckCarousel
+                      slides={project.evidenceImages.map((img, idx) => ({
+                        id: img.title + idx,
+                        image: img.url,
+                        alt: img.title,
+                        title: img.title,
+                        badge: img.type ? img.type.toUpperCase() : undefined,
+                        subtitle: img.description,
+                      }))}
+                      centerIndex={galleryCenterIndex}
+                      onCenterIndexChange={setGalleryCenterIndex}
+                      onActiveSlideClick={(_, idx) => openLightboxAt(idx)}
+                      aspectRatio="video"
+                      showCaption={true}
+                      showPagination={true}
+                      showNavigation={true}
+                      label={`${project.title} screenshot evidence fan deck`}
+                    />
                   </div>
                 )}
 

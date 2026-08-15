@@ -244,7 +244,7 @@ export const HeroEvidenceCarousel: React.FC = () => {
 
       {/* Main Evidence Display Stage */}
       <div
-        className="mt-6 rounded-2xl bg-[#141418] border border-[#27272A] overflow-hidden shadow-2xl transition-all group"
+        className="mt-6 rounded-2xl bg-[#141418]/90 backdrop-blur-md border border-[#27272A]/80 overflow-hidden shadow-2xl transition-all group"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >

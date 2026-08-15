@@ -9,7 +9,12 @@ export const About: React.FC = () => {
   const { about } = portfolioData;
 
   return (
-    <section id="about" className="py-24 px-4 sm:px-6 lg:px-8 relative bg-[#09090B] scroll-mt-24">
+    <section
+      id="about"
+      data-trig
+      data-trig-var="true"
+      className="py-24 px-4 sm:px-6 lg:px-8 relative bg-[#09090B] scroll-mt-24"
+    >
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Section Header with SectionTransitionLine & Tubelight Electrical Ignition Reveal */}
         <SectionTransitionLine title="About Me" />
@@ -38,11 +43,11 @@ export const About: React.FC = () => {
                     Overview
                   </span>
                 </div>
-                <p className="editorial-dropcap font-body text-[#F4F4F6] leading-relaxed text-base sm:text-lg font-normal">
+                <p className="editorial-dropcap font-body about-editorial-text text-[#F4F4F6] leading-relaxed text-base sm:text-lg font-normal">
                   {about.shortIntro}
                 </p>
                 {about.professionalFocus && (
-                  <p className="text-[#9E9A93] leading-relaxed text-sm pt-4 border-t border-[#27272A] font-body">
+                  <p className="text-[#9E9A93] about-editorial-text leading-relaxed text-sm pt-4 border-t border-[#27272A] font-body">
                     {about.professionalFocus}
                   </p>
                 )}
@@ -63,7 +68,7 @@ export const About: React.FC = () => {
                           AI / ML & Prompt Engineering
                         </h4>
                       </div>
-                      <p className="text-[#9E9A93] text-sm leading-relaxed font-body">
+                      <p className="text-[#9E9A93] about-editorial-text text-sm leading-relaxed font-body">
                         {about.aiMlDirection}
                       </p>
                     </div>
@@ -87,7 +92,7 @@ export const About: React.FC = () => {
                       </h4>
                     </div>
                   </div>
-                  <p className="text-[#9E9A93] text-sm leading-relaxed font-body">
+                  <p className="text-[#9E9A93] about-editorial-text text-sm leading-relaxed font-body">
                     {about.developmentFocus}
                   </p>
                 </div>
@@ -106,7 +111,7 @@ export const About: React.FC = () => {
                       </h4>
                     </div>
                   </div>
-                  <p className="text-[#9E9A93] text-sm leading-relaxed font-body">
+                  <p className="text-[#9E9A93] about-editorial-text text-sm leading-relaxed font-body">
                     {about.learningBuildingFocus}
                   </p>
                 </div>

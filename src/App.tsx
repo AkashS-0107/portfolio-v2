@@ -17,13 +17,21 @@ import { CustomCursor } from './components/ui/CustomCursor';
 import { ScrollProgressIndicator } from './components/ui/ScrollProgressIndicator';
 import { BackToTop } from './components/ui/BackToTop';
 import { CinematicIntro } from './components/ui/CinematicIntro';
+import { initTrig } from './lib/trig';
+
+export interface ActiveHoveredSkill {
+  skillId: string;
+  skillName: string;
+  relatedProjects: string[];
+}
 
 export function App() {
-  const sectionIds = ['hero', ...navItems.map((item) => item.id)];
+  const sectionIds = navItems.map((item) => item.id);
   const activeSection = useActiveSection(sectionIds);
 
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
+  const [activeHoveredSkill, setActiveHoveredSkill] = useState<ActiveHoveredSkill | null>(null);
 
   // Cinematic Intro Active State
   const [isIntroActive, setIsIntroActive] = useState(() => {
@@ -31,6 +39,11 @@ export function App() {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     return !prefersReducedMotion;
   });
+
+  // Global Centralized Trig.js Initialization
+  useEffect(() => {
+    initTrig();
+  }, [isIntroActive]);
 
   // Global Ctrl+K / Cmd+K listener
   useEffect(() => {
@@ -80,12 +93,16 @@ export function App() {
         <About />
 
         {/* 3. SKILLS */}
-        <Skills onSelectProject={handleSelectProjectFromSkill} />
+        <Skills
+          onSelectProject={handleSelectProjectFromSkill}
+          onHoverSkillChange={setActiveHoveredSkill}
+        />
 
         {/* 4. PROJECTS */}
         <Projects
           externalSelectedProjectId={selectedProjectId}
           onClearExternalSelectedProject={() => setSelectedProjectId(null)}
+          activeHoveredSkill={activeHoveredSkill}
         />
 
         {/* 5. EXPERIENCE / INTERNSHIPS */}

@@ -151,6 +151,21 @@
 }
 
 /* Keyframes & Utilities */
+@keyframes headerEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-headerEntrance {
+  animation: headerEntrance 600ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -250,6 +265,26 @@
   box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.5);
 }
 
+/* Scroll Line Indicator Keyframe Animation */
+@keyframes scrollLinePulse {
+  0% {
+    transform: scaleY(0.4) translateY(-4px);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scaleY(1) translateY(4px);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(0.4) translateY(12px);
+    opacity: 0.2;
+  }
+}
+
+.animate-scrollLine {
+  animation: scrollLinePulse 2.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
 /* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -261,6 +296,147 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ==================================================
+   TRIG.JS SCROLL PARALLAX & REVEAL ENGINE STYLES
+   ================================================== */
+
+/* Hero Parallax using --trig-px Exposed by Trig.js */
+.hero-headline-parallax {
+  transform: translateY(calc(var(--trig-px, 0px) * -0.08));
+  will-change: transform;
+}
+
+.hero-atmosphere-parallax {
+  transform: translateY(calc(var(--trig-px, 0px) * 0.04)) scale(calc(1 + var(--trig, 0) * 0.03));
+  will-change: transform;
+}
+
+.hero-evidence-parallax {
+  transform: translateY(calc(var(--trig-px, 0px) * -0.03));
+  will-change: transform;
+}
+
+/* Living Scroll Indicator (Fade out on scroll down, fade in on top or scroll up) */
+.living-scroll-indicator {
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  opacity: 1;
+}
+body.trig-scroll-down:not(.trig-scroll-top) .living-scroll-indicator {
+  opacity: 0;
+  transform: translateY(12px);
+  pointer-events: none;
+}
+body.trig-scroll-up .living-scroll-indicator,
+body.trig-scroll-top .living-scroll-indicator {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Traveling Dot inside Living Scroll Cue */
+.living-scroll-cue-dot {
+  animation: travelCueDot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+@keyframes travelCueDot {
+  0% { transform: translateY(0px); opacity: 0.2; }
+  50% { transform: translateY(12px); opacity: 1; }
+  100% { transform: translateY(24px); opacity: 0.1; }
+}
+
+/* Skills ↔ Projects Relationship Highlighting & Dimming */
+.project-card-relationship {
+  transition: opacity 0.4s ease, transform 0.4s ease, border-color 0.4s ease, filter 0.4s ease;
+}
+.project-card-relationship.is-dimmed {
+  opacity: 0.35;
+  filter: grayscale(0.6);
+  pointer-events: auto;
+}
+.project-card-relationship.is-highlighted {
+  opacity: 1;
+  filter: grayscale(0);
+  border-color: #c56a4a !important;
+  box-shadow: 0 0 25px rgba(197, 106, 74, 0.25);
+  transform: translateY(-3px) scale(1.005);
+}
+
+/* Skill Pill Micro-Interactions */
+.skill-pill {
+  position: relative;
+  transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+}
+.skill-pill::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 15%;
+  width: 70%;
+  height: 2px;
+  background-color: #c56a4a;
+  transform: scaleX(0);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 1px;
+}
+.skill-pill:hover::after,
+.skill-pill:focus-visible::after,
+.skill-pill.is-active::after {
+  transform: scaleX(1);
+}
+
+/* About Reading Reveal (CSS Driven via --trig) */
+.about-editorial-text {
+  color: color-mix(in srgb, #71717a calc((1 - var(--trig, 0.5)) * 100%), #f4f4f6 calc(var(--trig, 0.5) * 100%));
+  transition: color 0.15s ease-out;
+}
+
+/* Project Image Desktop Physics */
+@media (pointer: fine) {
+  .project-image-interactive {
+    transition: transform 0.2s ease-out, filter 0.3s ease;
+    will-change: transform;
+  }
+  .project-image-interactive:hover {
+    transform: scale(1.02) translate(calc((var(--mouse-x-norm, 0.5) - 0.5) * 8px), calc((var(--mouse-y-norm, 0.5) - 0.5) * 8px));
+    filter: brightness(1.05) contrast(1.03);
+  }
+}
+
+/* Section Continuity Trail Dot */
+.section-trail-dot {
+  left: calc(var(--trig, 0) * 100%);
+  transition: left 0.1s ease-out;
+}
+
+/* Mobile & Touch Overrides */
+@media (pointer: coarse), (max-width: 767px) {
+  .hero-headline-parallax,
+  .hero-atmosphere-parallax,
+  .hero-evidence-parallax {
+    transform: none !important;
+  }
+  .project-image-interactive:hover {
+    transform: none !important;
+    filter: none !important;
+  }
+}
+
+/* Reduced Motion Overrides */
+@media (prefers-reduced-motion: reduce) {
+  .hero-headline-parallax,
+  .hero-atmosphere-parallax,
+  .hero-evidence-parallax,
+  .living-scroll-cue-dot,
+  .project-image-interactive,
+  .section-trail-dot {
+    transform: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+  .about-editorial-text {
+    color: #f4f4f6 !important;
+  }
+}
+
 
 
 

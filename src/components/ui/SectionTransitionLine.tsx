@@ -52,12 +52,14 @@ export const SectionTransitionLine: React.FC<SectionTransitionLineProps> = ({
 
   return (
     <div ref={containerRef} className={`space-y-6 ${className}`}>
-      {/* Animated Growing Transition Rule */}
+      {/* Animated Growing Transition Rule with Subtle Evidence-Trail Point */}
       <div className="relative w-full h-[1px] bg-[#27272A] overflow-hidden">
         <div
           className="absolute inset-y-0 left-0 bg-gradient-to-r from-[#C56A4A] via-[#C56A4A]/60 to-transparent transition-all duration-800 ease-[cubic-bezier(0.22,1,0.36,1)]"
           style={{ width: isVisible ? '100%' : '0%' }}
         />
+        {/* Subtle section scroll trail copper point indicator */}
+        <div className="absolute top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#C56A4A] shadow-[0_0_6px_#C56A4A] section-trail-dot" />
       </div>
 
       {/* Section Header with Number, Title Clip Reveal, & Action */}

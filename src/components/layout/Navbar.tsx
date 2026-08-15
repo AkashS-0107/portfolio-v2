@@ -4,6 +4,7 @@ import { navItems } from '../../data/navigation';
 import { portfolioData } from '../../data/portfolioData';
 import { MobileMenu } from './MobileMenu';
 import { useResumeAvailable } from '../../hooks/useResumeAvailable';
+import { GithubIcon, LinkedinIcon } from '../ui/Icons';
 
 interface NavbarProps {
   activeSection: string;
@@ -19,7 +20,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, onOpenCommandPale
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 40);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
@@ -36,34 +37,31 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, onOpenCommandPale
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
+        className={`fixed top-0 left-0 right-0 z-40 animate-headerEntrance transition-all duration-300 ${
           scrolled
-            ? 'bg-[#09090B]/90 backdrop-blur-md border-b border-[#27272A]/50 py-3 shadow-xl'
+            ? 'bg-[#09090B]/80 backdrop-blur-sm border-b border-[#27272A]/40 py-3 shadow-none'
             : 'bg-transparent border-b border-transparent py-4 sm:py-5'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4 sm:gap-6">
-          {/* Brand Identity & Desktop Navigation */}
-          <div className="flex items-center gap-6 lg:gap-10 shrink-0">
-            {/* Compact Brand Treatment */}
-            <a
-              href="#hero"
-              className="font-heading font-semibold text-xs sm:text-sm tracking-wider uppercase text-[#F4F4F6] hover:text-[#C56A4A] transition-colors flex items-center gap-2 shrink-0 focus-visible:ring-2 focus-visible:ring-[#C56A4A] focus-visible:outline-none rounded px-1"
-              aria-label="Akash Suresh - Back to top"
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#C56A4A]" />
-              <span>AKASH SURESH</span>
-            </a>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative min-h-[36px] flex items-center">
+          {/* Desktop 3-Region CSS Grid Layout (min-width: 769px) */}
+          <div className="header-inner hidden min-[769px]:grid grid-cols-[1fr_auto_1fr] items-center w-full min-h-[36px]">
+            {/* Region 1: Left reserved region for grid balance */}
+            <div className="header-left justify-self-start" aria-hidden="true" />
 
-            {/* Desktop Left Navigation */}
-            <nav className="hidden md:flex items-center gap-4 lg:gap-6 shrink-0" aria-label="Main Navigation">
+            {/* Region 2: Primary Navigation — Mathematically Centered */}
+            <nav
+              className="primary-nav primary-navigation justify-self-center flex items-center gap-2 md:gap-3 lg:gap-4 xl:gap-6"
+              aria-label="Main Navigation"
+            >
               {navItems.map((item) => {
                 const isActive = activeSection === item.id;
                 return (
                   <a
                     key={item.id}
                     href={`#${item.id}`}
-                    className={`relative py-1 font-heading text-xs uppercase tracking-widest font-medium transition-colors whitespace-nowrap focus-visible:ring-2 focus-visible:ring-[#C56A4A] focus-visible:outline-none rounded px-1 ${
+                    aria-current={isActive ? 'page' : undefined}
+                    className={`relative py-1 font-heading text-xs uppercase tracking-widest font-medium transition-colors whitespace-nowrap focus-visible:ring-2 focus-visible:ring-[#C56A4A] focus-visible:outline-none rounded px-1.5 ${
                       isActive
                         ? 'text-[#F4F4F6]'
                         : 'text-[#9E9A93] hover:text-[#F4F4F6]'
@@ -71,68 +69,71 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, onOpenCommandPale
                   >
                     {item.label}
                     {isActive && (
-                      <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#C56A4A] rounded-full animate-fadeIn" />
+                      <span className="absolute bottom-0 left-1.5 right-1.5 h-0.5 bg-[#C56A4A] rounded-full animate-fadeIn" />
                     )}
                   </a>
                 );
               })}
             </nav>
-          </div>
 
-          {/* Desktop Right Actions: GitHub, LinkedIn, Resume (when available), Search */}
-          <div className="hidden md:flex items-center gap-4 lg:gap-6 shrink-0">
-            <a
-              href={github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-heading text-xs uppercase tracking-widest text-[#9E9A93] hover:text-[#F4F4F6] transition-colors whitespace-nowrap focus-visible:ring-2 focus-visible:ring-[#C56A4A] focus-visible:outline-none rounded px-1"
-            >
-              GitHub
-            </a>
-            <a
-              href={linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-heading text-xs uppercase tracking-widest text-[#9E9A93] hover:text-[#F4F4F6] transition-colors whitespace-nowrap focus-visible:ring-2 focus-visible:ring-[#C56A4A] focus-visible:outline-none rounded px-1"
-            >
-              LinkedIn
-            </a>
-            {isResumeAvailable && resume && (
+            {/* Region 3: Utility Navigation — Right Region */}
+            <div className="header-utilities justify-self-end flex items-center gap-2 lg:gap-3 xl:gap-5">
               <a
-                href={resume}
+                href={github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-heading text-xs uppercase tracking-widest text-[#C56A4A] hover:text-[#E08A68] transition-colors flex items-center gap-1.5 whitespace-nowrap focus-visible:ring-2 focus-visible:ring-[#C56A4A] focus-visible:outline-none rounded px-1"
+                title="GitHub"
+                aria-label="GitHub"
+                className="font-heading text-xs uppercase tracking-widest text-[#9E9A93] hover:text-[#F4F4F6] transition-colors whitespace-nowrap focus-visible:ring-2 focus-visible:ring-[#C56A4A] focus-visible:outline-none rounded p-1.5 xl:px-1 xl:py-0.5 flex items-center gap-1.5"
               >
-                <FileDown className="w-3.5 h-3.5 text-[#C56A4A]" />
-                <span>Resume</span>
+                <GithubIcon className="w-4 h-4 xl:hidden" />
+                <span className="hidden xl:inline">GitHub</span>
               </a>
-            )}
 
-            {onOpenCommandPalette && (
-              <button
-                type="button"
-                onClick={onOpenCommandPalette}
-                className="p-2 rounded text-[#9E9A93] hover:text-[#C56A4A] hover:bg-[#141418] transition-colors focus:outline-none focus:ring-1 focus:ring-[#C56A4A] min-h-[36px] min-w-[36px] flex items-center justify-center"
-                aria-label="Open Command Palette"
-                title="Search (⌘K)"
+              <a
+                href={linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                title="LinkedIn"
+                aria-label="LinkedIn"
+                className="font-heading text-xs uppercase tracking-widest text-[#9E9A93] hover:text-[#F4F4F6] transition-colors whitespace-nowrap focus-visible:ring-2 focus-visible:ring-[#C56A4A] focus-visible:outline-none rounded p-1.5 xl:px-1 xl:py-0.5 flex items-center gap-1.5"
               >
-                <Search className="w-4 h-4" />
-              </button>
-            )}
+                <LinkedinIcon className="w-4 h-4 xl:hidden" />
+                <span className="hidden xl:inline">LinkedIn</span>
+              </a>
+
+              {isResumeAvailable && resume && (
+                <a
+                  href={resume}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Resume"
+                  aria-label="Resume"
+                  className="font-heading text-xs uppercase tracking-widest text-[#9E9A93] hover:text-[#F4F4F6] transition-colors flex items-center gap-1.5 whitespace-nowrap focus-visible:ring-2 focus-visible:ring-[#C56A4A] focus-visible:outline-none rounded p-1.5 xl:px-1 xl:py-0.5"
+                >
+                  <FileDown className="w-3.5 h-3.5 text-[#C56A4A]" />
+                  <span className="hidden xl:inline">Resume</span>
+                </a>
+              )}
+
+              {onOpenCommandPalette && (
+                <button
+                  type="button"
+                  onClick={onOpenCommandPalette}
+                  className="p-1.5 rounded text-[#9E9A93] hover:text-[#C56A4A] hover:bg-[#141418] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#C56A4A] flex items-center justify-center min-h-[32px] min-w-[32px]"
+                  aria-label="Open Command Palette"
+                  title="Search (⌘K)"
+                >
+                  <Search className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
           </div>
 
-          {/* Mobile Header Bar */}
-          <div className="md:hidden flex items-center justify-between w-full">
-            {/* Compact Mobile Brand Name */}
-            <a
-              href="#hero"
-              className="font-heading font-semibold text-xs tracking-wider uppercase text-[#F4F4F6] hover:text-[#C56A4A] transition-colors flex items-center gap-2 focus-visible:ring-2 focus-visible:ring-[#C56A4A] focus-visible:outline-none rounded px-1"
-              aria-label="Akash Suresh - Back to top"
-            >
-              <span className="w-1.5 h-1.5 rounded-full bg-[#C56A4A]" />
-              <span>AKASH SURESH</span>
-            </a>
+          {/* Mobile Header Bar — Anonymized Header with Right MENU & Search */}
+          <div className="max-[768px]:flex min-[769px]:hidden items-center justify-between w-full">
+            {/* Intentionally Minimal Left Space */}
+            <div className="w-6" />
 
             {/* Right: Search & Mobile Menu Trigger */}
             <div className="flex items-center gap-2">
@@ -172,4 +173,5 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, onOpenCommandPale
     </>
   );
 };
+
 

@@ -9,13 +9,26 @@ export const Internships: React.FC = () => {
   const { internships } = portfolioData;
 
   return (
-    <section id="internships" className="py-24 px-4 sm:px-6 lg:px-8 bg-[#09090B] relative scroll-mt-24">
+    <section
+      id="internships"
+      data-trig
+      data-trig-var="true"
+      className="py-24 px-4 sm:px-6 lg:px-8 bg-[#09090B] relative scroll-mt-24"
+    >
       <div className="max-w-6xl mx-auto space-y-12">
         {/* Section Header with SectionTransitionLine */}
         <SectionTransitionLine title="Experience" />
 
-        {/* Newspaper Ledger Engineering Timeline */}
-        <div className="relative border-l border-[#27272A] ml-4 sm:ml-8 space-y-12 pl-6 sm:pl-10">
+        {/* Newspaper Ledger Engineering Timeline with Living Draw Line */}
+        <div className="relative ml-4 sm:ml-8 space-y-12 pl-6 sm:pl-10">
+          {/* Timeline Background Track & Living Copper Overlay */}
+          <div className="absolute left-0 top-0 bottom-0 w-[2px] bg-[#27272A] rounded-full overflow-hidden pointer-events-none">
+            <div
+              className="absolute top-0 left-0 w-full bg-gradient-to-b from-[#C56A4A] via-[#C56A4A] to-[#E08A68] transition-all duration-150 rounded-full"
+              style={{ height: 'calc(var(--trig, 0.4) * 100%)' }}
+            />
+          </div>
+
           {internships.map((internship, idx) => (
             <ScrollReveal
               key={internship.id}
@@ -26,12 +39,12 @@ export const Internships: React.FC = () => {
             >
               <div className="relative group">
                 {/* Monospaced Timeline Node */}
-                <div className="absolute -left-[31px] sm:-left-[47px] top-2 w-5 h-5 rounded bg-[#09090B] border border-[#C56A4A] flex items-center justify-center">
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#C56A4A]" />
+                <div className="absolute -left-[31px] sm:-left-[47px] top-2 w-5 h-5 rounded bg-[#09090B] border border-[#C56A4A] flex items-center justify-center shadow-md">
+                  <div className="w-1.5 h-1.5 rounded-full bg-[#C56A4A] animate-pulse" />
                 </div>
 
                 {/* Internship Ledger Card */}
-                <div className="p-7 rounded bg-[#141418] border border-[#27272A] hover:border-[#33333C] transition-all shadow-xl space-y-4">
+                <div className="p-7 rounded bg-[#141418] border border-[#27272A] hover:border-[#C56A4A]/50 transition-all shadow-xl space-y-4">
                   <div className="flex flex-wrap items-start justify-between gap-4 border-b border-[#27272A] pb-4">
                     <div className="space-y-1">
                       <div className="flex items-center gap-2 text-[#C56A4A] font-mono-tech text-xs font-bold uppercase tracking-widest">
