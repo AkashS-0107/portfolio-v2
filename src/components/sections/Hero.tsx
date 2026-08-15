@@ -10,9 +10,10 @@ import { ScrollReveal } from '../ui/ScrollReveal';
 
 interface HeroProps {
   onOpenCommandPalette?: () => void;
+  isIntroActive?: boolean;
 }
 
-export const Hero: React.FC<HeroProps> = () => {
+export const Hero: React.FC<HeroProps> = ({ isIntroActive = false }) => {
   const { bio, professionalLinks } = portfolioData;
   const isResumeAvailable = useResumeAvailable();
   const { github, linkedin, email, resume } = professionalLinks;
@@ -64,7 +65,7 @@ export const Hero: React.FC<HeroProps> = () => {
       <AtmosphericBackground />
 
       {/* Cinematic Hero Cloud Reveal */}
-      <HeroCloudReveal />
+      <HeroCloudReveal isIntroActive={isIntroActive} />
 
       {/* Subtle Hairline Grid Background */}
       <div className="absolute inset-0 bg-grid-hairline opacity-20 pointer-events-none z-0" />

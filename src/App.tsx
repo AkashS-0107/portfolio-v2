@@ -16,6 +16,7 @@ import { CommandPalette } from './components/ui/CommandPalette';
 import { CustomCursor } from './components/ui/CustomCursor';
 import { ScrollProgressIndicator } from './components/ui/ScrollProgressIndicator';
 import { BackToTop } from './components/ui/BackToTop';
+import { CinematicIntro } from './components/ui/CinematicIntro';
 
 export function App() {
   const sectionIds = ['hero', ...navItems.map((item) => item.id)];
@@ -23,6 +24,13 @@ export function App() {
 
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
+
+  // Cinematic Intro Active State
+  const [isIntroActive, setIsIntroActive] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    return !prefersReducedMotion;
+  });
 
   // Global Ctrl+K / Cmd+K listener
   useEffect(() => {
@@ -46,6 +54,11 @@ export function App() {
 
   return (
     <div className="min-h-screen bg-[#09090B] text-slate-100 font-sans selection:bg-[#C56A4A]/30 selection:text-[#F4F4F6]">
+      {/* Stage 12 — Cinematic Opening Sequence */}
+      {isIntroActive && (
+        <CinematicIntro onComplete={() => setIsIntroActive(false)} />
+      )}
+
       {/* Scroll Progress Bar (Desktop right vertical line / Mobile top horizontal line) */}
       <ScrollProgressIndicator />
 
@@ -58,7 +71,10 @@ export function App() {
       {/* Main Page Layout rendered in exact required order */}
       <main id="main-content" className="relative">
         {/* 1. HERO */}
-        <Hero onOpenCommandPalette={() => setIsCommandPaletteOpen(true)} />
+        <Hero
+          onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
+          isIntroActive={isIntroActive}
+        />
 
         {/* 2. ABOUT */}
         <About />

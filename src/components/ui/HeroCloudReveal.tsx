@@ -1,39 +1,43 @@
 import React, { useEffect, useState } from 'react';
 
-export const HeroCloudReveal: React.FC = () => {
+interface HeroCloudRevealProps {
+  isIntroActive?: boolean;
+}
+
+export const HeroCloudReveal: React.FC<HeroCloudRevealProps> = ({ isIntroActive = false }) => {
   const [isVisible, setIsVisible] = useState(() => {
     if (typeof window === 'undefined') return false;
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const hasSeenReveal = sessionStorage.getItem('hero_cloud_reveal_seen');
-    return !prefersReducedMotion && hasSeenReveal !== 'true';
+    return !prefersReducedMotion;
   });
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
     if (!isVisible) return;
+    // Wait until cinematic intro transition begins or completes
+    if (isIntroActive) return;
 
     // Trigger cloud separation sequence swiftly
     const timer1 = setTimeout(() => {
       setIsAnimating(true);
-    }, 150);
+    }, 100);
 
     const timer2 = setTimeout(() => {
       setIsVisible(false);
-      sessionStorage.setItem('hero_cloud_reveal_seen', 'true');
-    }, 1200);
+    }, 1100);
 
     return () => {
       clearTimeout(timer1);
       clearTimeout(timer2);
     };
-  }, [isVisible]);
+  }, [isVisible, isIntroActive]);
 
   if (!isVisible) return null;
 
   return (
     <div
       aria-hidden="true"
-      className="fixed inset-0 z-50 pointer-events-none overflow-hidden flex items-center justify-center bg-[#09090B]/60 backdrop-blur-[2px]"
+      className="fixed inset-0 z-40 pointer-events-none overflow-hidden flex items-center justify-center bg-[#09090B]/60 backdrop-blur-[2px]"
     >
       {/* Left Cloud Layer */}
       <div
@@ -64,19 +68,8 @@ export const HeroCloudReveal: React.FC = () => {
           <path d="M100,0 Q70,50 100,100 L0,100 L0,0 Z" />
         </svg>
       </div>
-
-      {/* Center Cinematic Shimmer */}
-      <div
-        className={`relative text-center transition-all duration-700 ${
-          isAnimating ? 'opacity-0 scale-105' : 'opacity-100 scale-100'
-        }`}
-      >
-        <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded bg-[#141418] border border-[#C56A4A]/40 text-[#C56A4A] font-heading font-semibold text-xs tracking-wider uppercase shadow-2xl">
-          <span className="w-2 h-2 rounded-full bg-[#10B981] animate-ping" />
-          <span>PORTFOLIO V2</span>
-        </div>
-      </div>
     </div>
   );
 };
+
 
