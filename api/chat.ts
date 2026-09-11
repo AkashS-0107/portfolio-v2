@@ -1,5 +1,5 @@
 import { buildSystemPrompt } from '../src/lib/chatbot/systemPrompt';
-import { GeminiProvider } from '../src/lib/chatbot/provider';
+import { OpenRouterProvider } from '../src/lib/chatbot/provider';
 import type { ChatMessagePayload } from '../src/lib/chatbot/types';
 
 // In-memory rate limiter: IP -> Array of timestamps (ms)
@@ -39,7 +39,6 @@ interface ServerRequest {
   body?: unknown;
   headers?: Record<string, string | string[] | undefined>;
   socket?: { remoteAddress?: string };
-  on?: (event: string, listener: (chunk?: unknown) => void) => void;
 }
 
 interface ServerResponse {
@@ -58,6 +57,11 @@ export default async function handler(req: ServerRequest, res: ServerResponse) {
   // Helper functions for unified Node.js / Vercel response handling
   const sendJson = (statusCode: number, data: unknown) => {
     try {
+      const setHeaderFn = res.setHeader;
+      if (typeof setHeaderFn === 'function') {
+        setHeaderFn.call(res, 'Content-Type', 'application/json');
+      }
+
       const statusFn = res.status;
       const jsonFn = res.json;
       if (typeof statusFn === 'function' && typeof jsonFn === 'function') {
@@ -67,10 +71,6 @@ export default async function handler(req: ServerRequest, res: ServerResponse) {
         }
       }
       res.statusCode = statusCode;
-      const setHeaderFn = res.setHeader;
-      if (typeof setHeaderFn === 'function') {
-        setHeaderFn.call(res, 'Content-Type', 'application/json');
-      }
       const endFn = res.end;
       if (typeof endFn === 'function') {
         endFn.call(res, JSON.stringify(data));
@@ -86,6 +86,7 @@ export default async function handler(req: ServerRequest, res: ServerResponse) {
       const fn = res.setHeader;
       if (typeof fn === 'function') {
         fn.call(res, 'Allow', 'POST, OPTIONS');
+        fn.call(res, 'Content-Type', 'application/json');
       }
       const statusFn = res.status;
       if (typeof statusFn === 'function') {
@@ -130,32 +131,19 @@ export default async function handler(req: ServerRequest, res: ServerResponse) {
       } catch {
         return sendJson(400, { error: 'Invalid JSON payload in request body.' });
       }
-    } else if (!body && typeof req.on === 'function') {
-      // Read stream if body wasn't pre-parsed
+    } else if (!body && typeof (req as unknown as { on?: unknown }).on === 'function') {
       try {
         const raw = await new Promise<string>((resolve, reject) => {
           let acc = '';
-          const timer = setTimeout(() => resolve(''), 1000);
-          if (req.on) {
-            req.on('data', (chunk?: unknown) => {
-              acc += String(chunk || '');
-              if (acc.length > 50000) {
-                clearTimeout(timer);
-                reject(new Error('Payload too large'));
-              }
-            });
-            req.on('end', () => {
-              clearTimeout(timer);
-              resolve(acc);
-            });
-            req.on('error', (err?: unknown) => {
-              clearTimeout(timer);
-              reject(err);
-            });
-          } else {
-            clearTimeout(timer);
-            resolve('');
-          }
+          const reqStream = req as unknown as { on: (evt: string, fn: (chunk?: unknown) => void) => void };
+          reqStream.on('data', (chunk?: unknown) => {
+            acc += String(chunk || '');
+            if (acc.length > 50000) {
+              reject(new Error('Payload too large'));
+            }
+          });
+          reqStream.on('end', () => resolve(acc));
+          reqStream.on('error', (err?: unknown) => reject(err));
         });
         if (raw.trim()) {
           body = JSON.parse(raw);
@@ -171,6 +159,12 @@ export default async function handler(req: ServerRequest, res: ServerResponse) {
 
     if (!body || typeof body !== 'object') {
       return sendJson(400, { error: 'Request body must be a valid JSON object.' });
+    }
+
+    // Check payload size limit (50KB serialized boundary)
+    const serializedBody = JSON.stringify(body);
+    if (serializedBody.length > 50000) {
+      return sendJson(400, { error: 'Payload size exceeds maximum allowed limit of 50KB.' });
     }
 
     const { messages } = body as { messages?: unknown };
@@ -223,40 +217,45 @@ export default async function handler(req: ServerRequest, res: ServerResponse) {
     // 6. Construct System Prompt Server-Side
     const systemPrompt = buildSystemPrompt();
 
-    // 7. Invoke LLM Provider with Timeout
-    const provider = new GeminiProvider();
+    // 7. Check Server Credential
+    const provider = new OpenRouterProvider();
+
+    // 8. Invoke LLM Provider with AbortController Timeout (10 seconds)
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
 
     try {
-      const timeoutPromise = new Promise<never>((_, reject) => {
-        const timer = setTimeout(() => reject(new Error('PROVIDER_TIMEOUT')), 10000);
-        if (timer && typeof timer === 'object' && 'unref' in timer) {
-          (timer as { unref: () => void }).unref();
-        }
-      });
-
-      const responseText = await Promise.race([
-        provider.generateResponse(validatedMessages, systemPrompt),
-        timeoutPromise,
-      ]);
-
+      const responseText = await provider.generateResponse(
+        validatedMessages,
+        systemPrompt,
+        controller.signal
+      );
+      clearTimeout(timeoutId);
       return sendJson(200, { message: responseText });
     } catch (err: unknown) {
-      const errMsg = err instanceof Error ? err.message : '';
-      if (errMsg === 'PROVIDER_TIMEOUT') {
+      clearTimeout(timeoutId);
+
+      if (err instanceof Error && err.name === 'AbortError') {
         return sendJson(504, { error: 'AI request timed out after 10 seconds. Please try again.' });
       }
 
-      // Fall back safely if API key is missing or upstream fails
-      if (errMsg.includes('GEMINI_API_KEY')) {
-        return sendJson(200, {
-          message: "I am operating in development preview mode. The server API key is not configured yet, but feel free to explore Akash's portfolio sections!",
+      const errMsg = err instanceof Error ? err.message : '';
+
+      if (errMsg.includes('OPENROUTER_API_KEY')) {
+        return sendJson(503, {
+          error: 'AI service is currently unavailable. Please try again later.',
         });
       }
 
-      return sendJson(500, { error: 'An unexpected error occurred while communicating with the AI service.' });
+      if (errMsg.includes('HTTP 429')) {
+        return sendJson(429, { error: 'Rate limit exceeded. Please wait a minute before sending more messages.' });
+      }
+
+      return sendJson(502, { error: 'An unexpected error occurred while communicating with the AI service.' });
     }
   } catch (uncaughtErr: unknown) {
     console.error('Uncaught serverless handler error:', uncaughtErr);
     return sendJson(500, { error: 'An unexpected server error occurred.' });
   }
 }
+

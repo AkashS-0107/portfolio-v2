@@ -1,19 +1,19 @@
 import type { LLMProvider, ChatMessagePayload } from './types';
 
 /**
- * Server-side Gemini LLM Provider using direct native fetch.
- * Does not require external SDK dependencies. Uses process.env.GEMINI_API_KEY.
- * Targets the verified stable Flash model: gemini-3.8-flash.
+ * Server-side OpenRouter LLM Provider using direct native fetch.
+ * Does not require external SDK dependencies. Uses process.env.OPENROUTER_API_KEY.
+ * Targets the verified stable Flash model: google/gemini-2.5-flash.
  */
-export class GeminiProvider implements LLMProvider {
-  name = 'Google Gemini (REST)';
+export class OpenRouterProvider implements LLMProvider {
+  name = 'OpenRouter (Gemini)';
   private apiKey: string;
   private modelName: string;
 
-  constructor(apiKey?: string, modelName = 'gemini-3.8-flash') {
+  constructor(apiKey?: string, modelName?: string) {
     const globalProcess = (globalThis as unknown as { process?: { env?: Record<string, string> } }).process;
-    this.apiKey = apiKey || globalProcess?.env?.GEMINI_API_KEY || '';
-    this.modelName = modelName;
+    this.apiKey = apiKey || globalProcess?.env?.OPENROUTER_API_KEY || '';
+    this.modelName = modelName || globalProcess?.env?.OPENROUTER_MODEL || 'google/gemini-2.5-flash';
   }
 
   public getModelName(): string {
@@ -22,58 +22,81 @@ export class GeminiProvider implements LLMProvider {
 
   async generateResponse(
     messages: ChatMessagePayload[],
-    systemPrompt: string
+    systemPrompt: string,
+    signal?: AbortSignal
   ): Promise<string> {
     if (!this.apiKey) {
-      throw new Error('GEMINI_API_KEY is not configured on the server.');
+      throw new Error('OPENROUTER_API_KEY is not configured on the server.');
     }
 
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${this.modelName}:generateContent?key=${this.apiKey}`;
+    const url = 'https://openrouter.ai/api/v1/chat/completions';
 
-    // Map roles: 'assistant' -> 'model', 'user' -> 'user'
-    const contents = messages.map((m) => ({
-      role: m.role === 'assistant' ? 'model' : 'user',
-      parts: [{ text: m.content }],
-    }));
+    const formattedMessages = [
+      { role: 'system', content: systemPrompt },
+      ...messages.map((m) => ({
+        role: m.role,
+        content: m.content,
+      })),
+    ];
 
     const body = {
-      system_instruction: {
-        parts: [{ text: systemPrompt }],
-      },
-      contents,
-      generationConfig: {
-        maxOutputTokens: 800,
-        temperature: 0.7,
-      },
+      model: this.modelName,
+      messages: formattedMessages,
+      temperature: 0.7,
+      max_tokens: 800,
     };
 
     const response = await fetch(url, {
       method: 'POST',
       headers: {
+        Authorization: `Bearer ${this.apiKey}`,
         'Content-Type': 'application/json',
+        'HTTP-Referer': 'https://www.akashsuresh.me',
+        'X-Title': 'Akash Suresh Portfolio AI Companion',
       },
       body: JSON.stringify(body),
+      signal,
     });
 
     if (!response.ok) {
-      const errText = await response.text().catch(() => '');
-      throw new Error(`Upstream Provider HTTP ${response.status}: ${errText.slice(0, 100)}`);
+      throw new Error(`Upstream Provider HTTP ${response.status}`);
     }
 
-    const data = (await response.json()) as {
-      candidates?: Array<{
-        content?: {
-          parts?: Array<{ text?: string }>;
+    let data: unknown;
+    try {
+      data = await response.json();
+    } catch {
+      throw new Error('Malformed response structure from upstream LLM provider.');
+    }
+
+    const typedData = data as {
+      choices?: Array<{
+        message?: {
+          content?: unknown;
         };
       }>;
     };
 
-    const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-
-    if (!text || typeof text !== 'string') {
+    if (
+      !typedData ||
+      typeof typedData !== 'object' ||
+      !Array.isArray(typedData.choices) ||
+      typedData.choices.length === 0
+    ) {
       throw new Error('Malformed response structure from upstream LLM provider.');
     }
 
-    return text.trim();
+    const firstChoice = typedData.choices[0];
+    if (!firstChoice || typeof firstChoice !== 'object' || !firstChoice.message) {
+      throw new Error('Malformed response structure from upstream LLM provider.');
+    }
+
+    const content = firstChoice.message.content;
+    if (typeof content !== 'string' || content.trim().length === 0) {
+      throw new Error('Malformed response structure from upstream LLM provider.');
+    }
+
+    return content.trim();
   }
 }
+

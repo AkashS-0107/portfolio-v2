@@ -1,11 +1,96 @@
 import { test, expect } from '@playwright/test';
-import { GeminiProvider } from '../src/lib/chatbot/provider';
+import { OpenRouterProvider } from '../src/lib/chatbot/provider';
+import * as fs from 'fs';
 
-test.describe('Phase 5.1 — Gemini Provider Migration', () => {
-  test('Provider configuration resolves to gemini-3.8-flash and not retired gemini-2.0-flash', async () => {
-    const provider = new GeminiProvider();
-    expect(provider.getModelName()).toBe('gemini-3.8-flash');
-    expect(provider.getModelName()).not.toBe('gemini-2.0-flash');
+test.describe('Phase 5.1 — OpenRouter Provider Migration', () => {
+  test('Provider configuration resolves to google/gemini-2.5-flash', async () => {
+    const provider = new OpenRouterProvider();
+    expect(provider.getModelName()).toBe('google/gemini-2.5-flash');
+    expect(provider.name).toBe('OpenRouter (Gemini)');
+  });
+
+  test('OpenRouterProvider rejects when OPENROUTER_API_KEY is missing', async () => {
+    const provider = new OpenRouterProvider();
+    await expect(
+      provider.generateResponse([{ role: 'user', content: 'hello' }], 'system')
+    ).rejects.toThrow('OPENROUTER_API_KEY is not configured on the server.');
+  });
+
+  test('OpenRouterProvider rejects malformed JSON response', async () => {
+    const provider = new OpenRouterProvider('fake-key');
+
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = (async () => {
+      return new Response('invalid json', { status: 200 });
+    }) as typeof fetch;
+
+    try {
+      await expect(
+        provider.generateResponse([{ role: 'user', content: 'hello' }], 'system')
+      ).rejects.toThrow('Malformed response structure from upstream LLM provider.');
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
+  });
+
+  test('OpenRouterProvider rejects response with empty choices array', async () => {
+    const provider = new OpenRouterProvider('fake-key');
+
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = (async () => {
+      return new Response(JSON.stringify({ choices: [] }), { status: 200 });
+    }) as typeof fetch;
+
+    try {
+      await expect(
+        provider.generateResponse([{ role: 'user', content: 'hello' }], 'system')
+      ).rejects.toThrow('Malformed response structure from upstream LLM provider.');
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
+  });
+
+  test('OpenRouterProvider rejects response with empty content', async () => {
+    const provider = new OpenRouterProvider('fake-key');
+
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = (async () => {
+      return new Response(JSON.stringify({ choices: [{ message: { content: '   ' } }] }), {
+        status: 200,
+      });
+    }) as typeof fetch;
+
+    try {
+      await expect(
+        provider.generateResponse([{ role: 'user', content: 'hello' }], 'system')
+      ).rejects.toThrow('Malformed response structure from upstream LLM provider.');
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
+  });
+
+  test('OpenRouterProvider handles upstream HTTP 401 error safely', async () => {
+    const provider = new OpenRouterProvider('fake-key');
+
+    const originalFetch = globalThis.fetch;
+    globalThis.fetch = (async () => {
+      return new Response('Unauthorized', { status: 401 });
+    }) as typeof fetch;
+
+    try {
+      await expect(
+        provider.generateResponse([{ role: 'user', content: 'hello' }], 'system')
+      ).rejects.toThrow('Upstream Provider HTTP 401');
+    } finally {
+      globalThis.fetch = originalFetch;
+    }
+  });
+
+  test('Regression Check: Active provider code contains ZERO GEMINI_API_KEY references', async () => {
+    const providerCode = fs.readFileSync('src/lib/chatbot/provider.ts', 'utf-8');
+    const apiCode = fs.readFileSync('api/chat.ts', 'utf-8');
+    expect(providerCode).not.toContain('GEMINI_API_KEY');
+    expect(apiCode).not.toContain('GEMINI_API_KEY');
   });
 });
 
@@ -310,14 +395,15 @@ test.describe('Phase 5 — Server API Validation (/api/chat)', () => {
     expect(json.error).toContain('length must be between 1 and 10');
   });
 
-  test('Missing GEMINI_API_KEY returns valid preview JSON response', async ({ request }) => {
+  test('Missing OPENROUTER_API_KEY returns 503 Service Unavailable JSON', async ({ request }) => {
     const res = await request.post('/api/chat', {
       data: {
         messages: [{ role: 'user', content: 'Hello' }],
       },
     });
-    expect(res.status()).toBe(200);
-    const json = (await res.json()) as { message?: string; error?: string };
-    expect(json.message || json.error).toBeDefined();
+    expect(res.status()).toBe(503);
+    const json = (await res.json()) as { error?: string };
+    expect(json.error).toBe('AI service is currently unavailable. Please try again later.');
   });
 });
+

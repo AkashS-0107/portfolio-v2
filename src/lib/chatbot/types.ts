@@ -16,6 +16,7 @@ export interface LLMProvider {
   name: string;
   generateResponse(
     messages: ChatMessagePayload[],
-    systemPrompt: string
+    systemPrompt: string,
+    signal?: AbortSignal
   ): Promise<string>;
 }
