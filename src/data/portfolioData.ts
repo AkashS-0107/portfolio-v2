@@ -1,30 +1,30 @@
-import type { Bio, PortfolioData, ProjectStatus, SkillCategory } from '../types/portfolio';
+import type { Bio, PortfolioData, ProjectStatus, SkillCategory } from '../types/portfolio.js';
 
 // Local Asset Imports
-import worksureHeroImg from '../assets/images/worksure/hero.png';
-import worksureEmployerImg from '../assets/images/worksure/employer login.png';
-import worksureEmployeeImg from '../assets/images/worksure/worker login.png';
-import inamigos1Img from '../assets/images/inamigos/Screenshot 2026-08-06 224851.png';
-import inamigos2Img from '../assets/images/inamigos/Screenshot 2026-08-06 224901.png';
-import inamigos3Img from '../assets/images/inamigos/Screenshot 2026-08-06 224924.png';
-import inamigos4Img from '../assets/images/inamigos/Screenshot 2026-08-06 224942.png';
-import inamigos5Img from '../assets/images/inamigos/Screenshot 2026-08-06 225009.png';
+const worksureHeroImg = new URL('../assets/images/worksure/hero.png', import.meta.url).href;
+const worksureEmployerImg = new URL('../assets/images/worksure/employer login.png', import.meta.url).href;
+const worksureEmployeeImg = new URL('../assets/images/worksure/worker login.png', import.meta.url).href;
+const inamigos1Img = new URL('../assets/images/inamigos/Screenshot 2026-08-06 224851.png', import.meta.url).href;
+const inamigos2Img = new URL('../assets/images/inamigos/Screenshot 2026-08-06 224901.png', import.meta.url).href;
+const inamigos3Img = new URL('../assets/images/inamigos/Screenshot 2026-08-06 224924.png', import.meta.url).href;
+const inamigos4Img = new URL('../assets/images/inamigos/Screenshot 2026-08-06 224942.png', import.meta.url).href;
+const inamigos5Img = new URL('../assets/images/inamigos/Screenshot 2026-08-06 225009.png', import.meta.url).href;
 
 // Design Haven Screenshots Imports
-import designHaven1Img from '../assets/images/design haven 1 (1).png';
-import designHaven2Img from '../assets/images/design haven 2.png';
-import designHaven3Img from '../assets/images/design haven(3).png';
+const designHaven1Img = new URL('../assets/images/design haven 1 (1).png', import.meta.url).href;
+const designHaven2Img = new URL('../assets/images/design haven 2.png', import.meta.url).href;
+const designHaven3Img = new URL('../assets/images/design haven(3).png', import.meta.url).href;
 
 // Certificate & Document Asset Imports
-import awsFoundationsCertImg from '../assets/images/certificate/foundations of prompt engineering.png';
-import awsEssentialsCertImg from '../assets/images/certificate/aws essentials prompt engineering.png';
-import mongodbCertImg from '../assets/images/certificate/mongodb.png';
-import ibmCertImg from '../assets/images/certificate/ibm skillsbuild.png';
-import nptelCertImg from '../assets/images/certificate/nptel os.png';
-import threxCertImg from '../assets/images/certificate/threx hackathon.png';
-import futureInternsCertImg from '../assets/images/certificate/future interns completion.jpeg';
-import futureInternsLorImg from '../assets/images/certificate/lor.jpeg';
-import inamigosCertImg from '../assets/images/certificate/internship 1 completion.jpeg';
+const awsFoundationsCertImg = new URL('../assets/images/certificate/foundations of prompt engineering.png', import.meta.url).href;
+const awsEssentialsCertImg = new URL('../assets/images/certificate/aws essentials prompt engineering.png', import.meta.url).href;
+const mongodbCertImg = new URL('../assets/images/certificate/mongodb.png', import.meta.url).href;
+const ibmCertImg = new URL('../assets/images/certificate/ibm skillsbuild.png', import.meta.url).href;
+const nptelCertImg = new URL('../assets/images/certificate/nptel os.png', import.meta.url).href;
+const threxCertImg = new URL('../assets/images/certificate/threx hackathon.png', import.meta.url).href;
+const futureInternsCertImg = new URL('../assets/images/certificate/future interns completion.jpeg', import.meta.url).href;
+const futureInternsLorImg = new URL('../assets/images/certificate/lor.jpeg', import.meta.url).href;
+const inamigosCertImg = new URL('../assets/images/certificate/internship 1 completion.jpeg', import.meta.url).href;
 
 const bioData: Bio = {
   name: 'Akash Suresh',

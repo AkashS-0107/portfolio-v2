@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { OpenRouterProvider } from '../src/lib/chatbot/provider';
+import { OpenRouterProvider } from '../src/lib/chatbot/provider.js';
 import * as fs from 'fs';
 
 test.describe('Phase 5.1 — OpenRouter Provider Migration', () => {
@@ -404,6 +404,29 @@ test.describe('Phase 5 — Server API Validation (/api/chat)', () => {
     expect(res.status()).toBe(503);
     const json = (await res.json()) as { error?: string };
     expect(json.error).toBe('AI service is currently unavailable. Please try again later.');
+  });
+
+  test('Serverless Module Resolution: Entire server dependency graph loads without ERR_MODULE_NOT_FOUND or ERR_UNKNOWN_FILE_EXTENSION', async () => {
+    // 1. Load api/chat handler
+    const chatModule = await import('../api/chat.js');
+    expect(typeof chatModule.default).toBe('function');
+
+    // 2. Load systemPrompt module
+    const sysPromptModule = await import('../src/lib/chatbot/systemPrompt.js');
+    expect(typeof sysPromptModule.buildSystemPrompt).toBe('function');
+    const promptText = sysPromptModule.buildSystemPrompt();
+    expect(promptText).toContain('VERIFIED PUBLIC PORTFOLIO CONTEXT:');
+
+    // 3. Load context module
+    const contextModule = await import('../src/lib/chatbot/context.js');
+    expect(typeof contextModule.getCompactPortfolioContext).toBe('function');
+    const contextText = contextModule.getCompactPortfolioContext();
+    expect(contextText).toContain('Akash Suresh');
+
+    // 4. Load portfolioData module
+    const dataModule = await import('../src/data/portfolioData.js');
+    expect(dataModule.portfolioData).toBeDefined();
+    expect(dataModule.portfolioData.bio.name).toBe('Akash Suresh');
   });
 });
 

@@ -1,4 +1,4 @@
-import type { LLMProvider, ChatMessagePayload } from './types';
+import type { LLMProvider, ChatMessagePayload } from './types.js';
 
 /**
  * Server-side OpenRouter LLM Provider using direct native fetch.

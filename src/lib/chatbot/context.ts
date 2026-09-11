@@ -1,5 +1,5 @@
-import { portfolioData } from '../../data/portfolioData';
-import type { Project, FutureProject, Internship, Certification } from '../../types/portfolio';
+import { portfolioData } from '../../data/portfolioData.js';
+import type { Project, FutureProject, Internship, Certification } from '../../types/portfolio.js';
 
 /**
  * Dynamically extracts verified public portfolio information from portfolioData.ts.

@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef } from 'react';
 import { useOnlineStatus } from './useOnlineStatus';
-import type { ChatMessage, ChatMessagePayload } from '../lib/chatbot/types';
-import { getLocalFallbackResponse } from '../lib/chatbot/fallback';
+import type { ChatMessage, ChatMessagePayload } from '../lib/chatbot/types.js';
+import { getLocalFallbackResponse } from '../lib/chatbot/fallback.js';
 
 const INITIAL_GREETING: ChatMessage = {
   id: 'init-1',

@@ -1,5 +1,5 @@
-import { portfolioData } from '../../data/portfolioData';
-import type { Project } from '../../types/portfolio';
+import { portfolioData } from '../../data/portfolioData.js';
+import type { Project } from '../../types/portfolio.js';
 
 /**
  * Client-side local response engine for offline mode, API timeouts, or rate limits.

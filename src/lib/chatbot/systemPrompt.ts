@@ -1,4 +1,4 @@
-import { getCompactPortfolioContext } from './context';
+import { getCompactPortfolioContext } from './context.js';
 
 export function buildSystemPrompt(): string {
   const context = getCompactPortfolioContext();

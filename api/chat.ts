@@ -1,6 +1,6 @@
-import { buildSystemPrompt } from '../src/lib/chatbot/systemPrompt';
-import { OpenRouterProvider } from '../src/lib/chatbot/provider';
-import type { ChatMessagePayload } from '../src/lib/chatbot/types';
+import { buildSystemPrompt } from '../src/lib/chatbot/systemPrompt.js';
+import { OpenRouterProvider } from '../src/lib/chatbot/provider.js';
+import type { ChatMessagePayload } from '../src/lib/chatbot/types.js';
 
 // In-memory rate limiter: IP -> Array of timestamps (ms)
 const ipRateLimitMap = new Map<string, number[]>();
