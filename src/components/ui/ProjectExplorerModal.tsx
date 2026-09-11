@@ -178,20 +178,16 @@ export const ProjectExplorerModal: React.FC<ProjectExplorerModalProps> = ({ proj
               </div>
             ) : (
               <>
-                {/* Titan Confidentiality Notice */}
-                {project.disclosureLevel === 'confidential' && (
+                {/* Project Confidentiality Notice */}
+                {project.confidentialNotice && (
                   <div className="p-4 rounded bg-[#141418] border-l-2 border-[#C56A4A] border-y border-r border-[#27272A] text-[#C56A4A] text-xs font-mono-tech space-y-2">
                     <div className="flex items-center gap-2 font-bold tracking-wider">
                       <ShieldAlert className="w-4 h-4 shrink-0 text-[#C56A4A]" />
                       <span>CONFIDENTIALITY CONTROL NOTICE</span>
                     </div>
                     <p className="leading-relaxed text-[#F4F4F6] font-body text-xs">
-                      {project.confidentialNotice ||
-                        'Flagship project under active engineering. Administrative modules and system architecture are confidential until official release. Only approved public hero representation is displayed.'}
+                      {project.confidentialNotice}
                     </p>
-                    <div className="text-[11px] text-[#9E9A93] pt-1">
-                      Further project details will be shared after completion and official approval.
-                    </div>
                   </div>
                 )}
 

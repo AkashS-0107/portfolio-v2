@@ -2,13 +2,15 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { ChevronLeft, ChevronRight, ExternalLink, ShieldCheck, Lock, Clock } from 'lucide-react';
 
 // Asset Imports for Evidence
-import titanHeroImg from '../../assets/images/titan/titan hero.png';
 import worksureHeroImg from '../../assets/images/worksure/hero.png';
 import worksureEmployerImg from '../../assets/images/worksure/employer login.png';
 import worksureEmployeeImg from '../../assets/images/worksure/worker login.png';
 import inamigos1Img from '../../assets/images/inamigos/Screenshot 2026-08-06 224851.png';
 import inamigos2Img from '../../assets/images/inamigos/Screenshot 2026-08-06 224901.png';
 import inamigos3Img from '../../assets/images/inamigos/Screenshot 2026-08-06 224924.png';
+import designHaven1Img from '../../assets/images/design haven 1 (1).png';
+import designHaven2Img from '../../assets/images/design haven 2.png';
+import designHaven3Img from '../../assets/images/design haven(3).png';
 import awsFoundationsCertImg from '../../assets/images/certificate/foundations of prompt engineering.png';
 import awsEssentialsCertImg from '../../assets/images/certificate/aws essentials prompt engineering.png';
 import mongodbCertImg from '../../assets/images/certificate/mongodb.png';
@@ -38,17 +40,22 @@ interface CarouselCard {
 export const HeroEvidenceCarousel: React.FC = () => {
   const cards: CarouselCard[] = [
     {
-      id: 'titan',
-      badge: 'FLAGSHIP PROJECT',
-      status: 'FLAGSHIP',
-      title: 'Titan Fitness Club',
-      subtitle: 'Full-Stack Architecture & Frontend Engineering',
+      id: 'design-haven',
+      badge: 'SPATIAL SHOWCASE',
+      status: 'COMPLETED',
+      title: 'Design Haven',
+      subtitle: 'Curated Spatial Directions & Interior Showcase',
       description:
-        'Flagship full-stack fitness management platform under active engineering and development.',
-      mainImage: titanHeroImg,
-      isConfidential: true,
-      confidentialNotice:
-        'Approved public hero visual representation. Administrative modules and internal architecture remain confidential.',
+        'Architectural interior showcase featuring 3D perspective spatial coverflow deck and atmospheric dark mode design.',
+      mainImage: designHaven1Img,
+      secondaryImages: [designHaven2Img, designHaven3Img],
+      links: [
+        {
+          label: 'Design Haven Repository',
+          url: 'https://github.com/AkashS-0107/design-haven',
+          author: 'Akash Suresh',
+        },
+      ],
       targetSectionId: 'projects',
     },
     {

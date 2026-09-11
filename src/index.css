@@ -10,9 +10,9 @@
   --raw-offwhite: #f4f4f6;
   --raw-grey-text: #a1a1aa;
   --raw-grey-muted-text: #71717a;
-  --raw-copper: #c56a4a;
-  --raw-copper-hover: #e08a68;
-  --raw-copper-deep: #9e4f39;
+  --raw-copper: #D47455;
+  --raw-copper-hover: #E89578;
+  --raw-copper-deep: #B0583F;
   --raw-mint: #10b981;
   --raw-terracotta: #e05a47;
 
@@ -57,9 +57,9 @@
   --color-surface-card: #18181f;
   --color-hairline: #27272a;
   --color-hairline-subtle: #33333c;
-  --color-copper-accent: #c56a4a;
-  --color-copper-hover: #e08a68;
-  --color-copper-deep: #9e4f39;
+  --color-copper-accent: #D47455;
+  --color-copper-hover: #E89578;
+  --color-copper-deep: #B0583F;
   --color-mint-accent: #10b981;
   --color-terracotta-accent: #e05a47;
 }

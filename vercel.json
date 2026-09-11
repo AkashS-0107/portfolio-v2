@@ -28,7 +28,7 @@
   ],
   "rewrites": [
     {
-      "source": "/((?!assets/|favicon|site.webmanifest|robots.txt|sitemap.xml|resume.pdf|.*\\..*).*)",
+      "source": "/((?!api/|assets/|favicon|site.webmanifest|robots.txt|sitemap.xml|resume.pdf|.*\\..*).*)",
       "destination": "/index.html"
     }
   ]

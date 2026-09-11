@@ -13,11 +13,11 @@ export const RecruiterViewBar: React.FC = () => {
   return (
     <>
       {/* Top Banner Button Trigger */}
-      <div className="fixed bottom-4 right-4 z-40">
+      <div className="fixed bottom-6 right-20 z-40">
         <button
           type="button"
           onClick={() => setIsRecruiterMode((prev) => !prev)}
-          className={`inline-flex items-center gap-2 px-4 py-2.5 rounded font-mono-tech text-xs font-bold tracking-wider shadow-2xl transition-all border min-h-[44px] ${
+          className={`inline-flex items-center gap-2 px-3.5 py-2.5 rounded font-mono-tech text-xs font-bold tracking-wider shadow-2xl transition-all border min-h-[44px] ${
             isRecruiterMode
               ? 'bg-[#C56A4A] text-[#09090B] border-[#C56A4A]'
               : 'bg-[#141418] text-[#C56A4A] border-[#27272A] hover:border-[#C56A4A]/50 hover:text-[#F4F4F6]'
@@ -26,13 +26,14 @@ export const RecruiterViewBar: React.FC = () => {
           aria-label="Toggle Recruiter Evaluation Mode"
         >
           <UserCheck className="w-4 h-4" />
-          <span>{isRecruiterMode ? 'EXIT RECRUITER VIEW' : 'RECRUITER QUICK VIEW'}</span>
+          <span className="hidden sm:inline">{isRecruiterMode ? 'EXIT RECRUITER VIEW' : 'RECRUITER QUICK VIEW'}</span>
+          <span className="sm:hidden">{isRecruiterMode ? 'EXIT VIEW' : 'RECRUITER VIEW'}</span>
         </button>
       </div>
 
       {/* Floating Recruiter Drawer / Fast Track Navigation Bar */}
       {isRecruiterMode && (
-        <div className="fixed bottom-20 right-4 left-4 sm:left-auto sm:w-[420px] z-40 bg-[#09090B] border border-[#27272A] rounded p-5 shadow-2xl animate-fadeIn text-[#F4F4F6] font-mono-tech space-y-4">
+        <div className="fixed bottom-20 right-4 left-4 sm:left-auto sm:right-6 sm:w-[420px] z-40 bg-[#09090B] border border-[#27272A] rounded p-5 shadow-2xl animate-fadeIn text-[#F4F4F6] font-mono-tech space-y-4 max-h-[75vh] overflow-y-auto">
           <div className="flex items-center justify-between border-b border-[#27272A] pb-3">
             <div className="flex items-center gap-2 text-[#C56A4A]">
               <CheckCircle2 className="w-4 h-4 text-[#10B981]" />

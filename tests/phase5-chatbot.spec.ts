@@ -1,0 +1,273 @@
+import { test, expect } from '@playwright/test';
+import { GeminiProvider } from '../src/lib/chatbot/provider';
+
+test.describe('Phase 5.1 — Gemini Provider Migration', () => {
+  test('Provider configuration resolves to gemini-3.8-flash and not retired gemini-2.0-flash', async () => {
+    const provider = new GeminiProvider();
+    expect(provider.getModelName()).toBe('gemini-3.8-flash');
+    expect(provider.getModelName()).not.toBe('gemini-2.0-flash');
+  });
+});
+
+test.describe('Phase 5 — Mini Open-Ended AI Chatbot UI & Integration', () => {
+
+  test.beforeEach(async ({ page }) => {
+    // Intercept POST /api/chat with deterministic mock response
+    await page.route('/api/chat', async (route) => {
+      const request = route.request();
+
+      if (request.method() !== 'POST') {
+        return route.fulfill({ status: 405, json: { error: 'Method Not Allowed' } });
+      }
+
+      let lastUserMsg = '';
+      try {
+        const postData = JSON.parse(request.postData() || '{}') as {
+          messages?: Array<{ role?: string; content?: string }>;
+        };
+        if (postData.messages && postData.messages.length > 0) {
+          lastUserMsg = postData.messages[postData.messages.length - 1]?.content || '';
+        }
+      } catch {
+        return route.fulfill({ status: 400, json: { error: 'Invalid JSON payload.' } });
+      }
+
+      let mockResponse = "I'm Akash's AI companion. I can answer questions about his portfolio, full-stack work, or general tech!";
+
+      if (lastUserMsg.toLowerCase().includes('girlfriend') || lastUserMsg.toLowerCase().includes('gf')) {
+        mockResponse = "I process portfolio data and code architectures, not Akash's private relationship department!";
+      } else if (lastUserMsg.toLowerCase().includes('projects') || lastUserMsg.toLowerCase().includes('design haven')) {
+        mockResponse = "Akash has built Design Haven (Spatial UI showcase) and WorkSure (Employment platform).";
+      } else if (lastUserMsg.toLowerCase().includes('react')) {
+        mockResponse = "React is a popular JavaScript library for building user interfaces based on components.";
+      }
+
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify({ message: mockResponse }),
+      });
+    });
+  });
+
+  test('Desktop (1440x900) — Launcher opens panel, focus moves to input, Escape closes', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+
+    const launcher = page.getByRole('button', { name: /Open AI Companion Chat/i });
+    await expect(launcher).toBeVisible();
+
+    // Click launcher
+    await launcher.click();
+
+    // Chat panel opens
+    const panel = page.getByRole('dialog', { name: /AI Companion Chat Window/i });
+    await expect(panel).toBeVisible();
+
+    // Input receives focus
+    const input = page.getByRole('textbox', { name: /Message input/i });
+    await expect(input).toBeFocused();
+
+    // Press Escape key
+    await page.keyboard.press('Escape');
+
+    // Panel closes
+    await expect(panel).not.toBeVisible();
+
+    // Focus returns to launcher
+    await expect(launcher).toBeFocused();
+  });
+
+  test('Desktop (1440x900) — Sends message via Enter & Button click, renders replies', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+
+    await page.getByRole('button', { name: /Open AI Companion Chat/i }).click();
+    const panel = page.getByRole('dialog', { name: /AI Companion Chat Window/i });
+    const input = page.getByRole('textbox', { name: /Message input/i });
+
+    // Type portfolio question & press Enter
+    await input.fill('What projects has Akash built?');
+    await page.keyboard.press('Enter');
+
+    // Assert user bubble and assistant mock reply render inside panel
+    await expect(panel.getByText('What projects has Akash built?')).toBeVisible();
+    await expect(panel.getByText(/Design Haven/i)).toBeVisible();
+
+    // Send technical question via Send button click
+    await input.fill('Explain React');
+    await page.getByRole('button', { name: /Send message/i }).click();
+
+    await expect(panel.getByText('Explain React')).toBeVisible();
+    await expect(panel.getByText(/JavaScript library/i)).toBeVisible();
+  });
+
+  test('Desktop (1440x900) — Private question receives privacy-safe response', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+
+    await page.getByRole('button', { name: /Open AI Companion Chat/i }).click();
+    const input = page.getByRole('textbox', { name: /Message input/i });
+
+    await input.fill("Who is Akash's gf?");
+    await page.keyboard.press('Enter');
+
+    await expect(page.getByText(/private relationship department/i)).toBeVisible();
+  });
+
+  test('Desktop (1440x900) — Empty submission is blocked', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+
+    await page.getByRole('button', { name: /Open AI Companion Chat/i }).click();
+    const sendBtn = page.getByRole('button', { name: /Send message/i });
+
+    // Send button disabled when empty
+    await expect(sendBtn).toBeDisabled();
+  });
+
+  test('Mobile (375x667) — Panel fits viewport without horizontal overflow', async ({ page }) => {
+    await page.setViewportSize({ width: 375, height: 667 });
+    await page.goto('/');
+
+    const launcher = page.getByRole('button', { name: /Open AI Companion Chat/i });
+    await expect(launcher).toBeVisible();
+    await launcher.click();
+
+    const panel = page.getByRole('dialog', { name: /AI Companion Chat Window/i });
+    await expect(panel).toBeVisible();
+
+    // Check no horizontal scrollbar on body
+    const bodyScrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+    const bodyClientWidth = await page.evaluate(() => document.documentElement.clientWidth);
+    expect(bodyScrollWidth).toBeLessThanOrEqual(bodyClientWidth);
+  });
+
+  test('Offline Mode — Bypasses /api/chat and uses local fallback engine', async ({ page, context }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+    await page.keyboard.press('Space');
+
+    const launcher = page.getByRole('button', { name: /Open AI Companion Chat/i });
+    await expect(launcher).toBeVisible();
+
+    // Track API calls
+    let apiCalled = false;
+    await page.route('/api/chat', async (route) => {
+      apiCalled = true;
+      route.fulfill({ status: 200, json: { message: 'API Call' } });
+    });
+
+    // Simulate offline status
+    await context.setOffline(true);
+    await page.evaluate(() => window.dispatchEvent(new Event('offline')));
+
+    await launcher.click();
+    await expect(page.getByText(/LOCAL MODE/i)).toBeVisible();
+
+    const input = page.getByRole('textbox', { name: /Message input/i });
+    await input.fill('What projects exist?');
+    await page.keyboard.press('Enter');
+
+    // Local response renders
+    await expect(page.getByText(/Akash has built public projects/i)).toBeVisible();
+    expect(apiCalled).toBe(false);
+
+    // Restore online
+    await context.setOffline(false);
+  });
+
+  test('API failure produces safe retryable UI', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+
+    // Override route to fail with 500 error
+    await page.route('/api/chat', async (route) => {
+      route.fulfill({ status: 500, json: { error: 'Server Error' } });
+    });
+
+    await page.getByRole('button', { name: /Open AI Companion Chat/i }).click();
+    const input = page.getByRole('textbox', { name: /Message input/i });
+
+    await input.fill('Trigger failure');
+    await page.keyboard.press('Enter');
+
+    // Retry banner renders
+    await expect(page.getByRole('button', { name: /Retry/i })).toBeVisible();
+  });
+});
+
+test.describe('Phase 5 — Server API Validation (/api/chat)', () => {
+
+  test('Method check: GET /api/chat returns 405 Method Not Allowed', async ({ request }) => {
+    const res = await request.get('/api/chat');
+    expect(res.status()).toBe(405);
+    const json = (await res.json()) as { error: string };
+    expect(json.error).toContain('Method Not Allowed');
+  });
+
+  test('Validation: Missing messages returns 400 Bad Request', async ({ request }) => {
+    const res = await request.post('/api/chat', {
+      data: {},
+    });
+    expect(res.status()).toBe(400);
+    const json = (await res.json()) as { error: string };
+    expect(json.error).toContain('messages array');
+  });
+
+  test('Validation: Empty messages array returns 400 Bad Request', async ({ request }) => {
+    const res = await request.post('/api/chat', {
+      data: { messages: [] },
+    });
+    expect(res.status()).toBe(400);
+    const json = (await res.json()) as { error: string };
+    expect(json.error).toContain('length must be between 1 and 10');
+  });
+
+  test('Validation: Invalid role returns 400 Bad Request', async ({ request }) => {
+    const res = await request.post('/api/chat', {
+      data: {
+        messages: [{ role: 'admin', content: 'hello' }],
+      },
+    });
+    expect(res.status()).toBe(400);
+    const json = (await res.json()) as { error: string };
+    expect(json.error).toContain("invalid role 'admin'");
+  });
+
+  test('Validation: Empty string content returns 400 Bad Request', async ({ request }) => {
+    const res = await request.post('/api/chat', {
+      data: {
+        messages: [{ role: 'user', content: '   ' }],
+      },
+    });
+    expect(res.status()).toBe(400);
+    const json = (await res.json()) as { error: string };
+    expect(json.error).toContain('cannot be empty');
+  });
+
+  test('Validation: Over 500 characters content returns 400 Bad Request', async ({ request }) => {
+    const longString = 'a'.repeat(501);
+    const res = await request.post('/api/chat', {
+      data: {
+        messages: [{ role: 'user', content: longString }],
+      },
+    });
+    expect(res.status()).toBe(400);
+    const json = (await res.json()) as { error: string };
+    expect(json.error).toContain('exceeds maximum length of 500');
+  });
+
+  test('Validation: More than 10 messages returns 400 Bad Request', async ({ request }) => {
+    const messages = Array.from({ length: 11 }, (_, i) => ({
+      role: 'user',
+      content: `msg ${i}`,
+    }));
+    const res = await request.post('/api/chat', {
+      data: { messages },
+    });
+    expect(res.status()).toBe(400);
+    const json = (await res.json()) as { error: string };
+    expect(json.error).toContain('length must be between 1 and 10');
+  });
+});

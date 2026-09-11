@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Search, X, ArrowRight } from 'lucide-react';
 import { portfolioData } from '../../data/portfolioData';
 import { navItems } from '../../data/navigation';
@@ -13,16 +13,17 @@ interface CommandPaletteProps {
 interface CommandItem {
   id: string;
   label: string;
-  category: 'Navigation' | 'Quick Links' | 'Projects' | 'Certifications';
+  category: 'Navigation' | 'Quick Links' | 'Projects' | 'Future Projects' | 'Certifications';
   action: () => void;
 }
 
 export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose, onSelectProject }) => {
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const inputRef = useRef<HTMLInputElement>(null);
   const isResumeAvailable = useResumeAvailable();
 
-  const { professionalLinks, projects, certifications } = portfolioData;
+  const { professionalLinks, projects, futureProjects = [], certifications } = portfolioData;
 
   const commands: CommandItem[] = [
     // Navigation
@@ -104,6 +105,17 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
       },
     })),
 
+    // Future Projects
+    ...futureProjects.map((fproj) => ({
+      id: `fproj-${fproj.id}`,
+      label: `Planned Project: ${fproj.title} (${fproj.plannedStatus})`,
+      category: 'Future Projects' as const,
+      action: () => {
+        window.location.hash = '#future-projects';
+        onClose();
+      },
+    })),
+
     // Certifications
     ...certifications.map((cert) => ({
       id: `cert-${cert.id}`,
@@ -149,6 +161,13 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, filteredCommands, selectedIndex, onClose]);
 
+  useEffect(() => {
+    if (isOpen) {
+      const timer = setTimeout(() => inputRef.current?.focus(), 20);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
+
   if (!isOpen) return null;
 
   return (
@@ -163,6 +182,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
         <div className="flex items-center px-4 py-3 bg-[#141418] border-b border-[#27272A]">
           <Search className="w-5 h-5 text-[#C56A4A] shrink-0 mr-3" />
           <input
+            ref={inputRef}
             type="text"
             value={query}
             onChange={(e) => {

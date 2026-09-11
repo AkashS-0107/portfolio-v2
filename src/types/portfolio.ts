@@ -75,6 +75,23 @@ export interface Internship {
   technologies?: string[];
   links?: string[];
   achievements?: string[];
+  certificateImage?: string;
+  lorImage?: string;
+  certificateId?: string;
+  registrationDetails?: string[];
+}
+
+export interface FutureProject {
+  id: string;
+  title: string;
+  subtitle?: string;
+  description: string;
+  intendedPurpose: string;
+  category: string;
+  plannedStatus: 'PLANNED' | 'RESEARCHING' | 'UPCOMING';
+  technologies?: string[];
+  timeline?: string;
+  provenanceNote?: string;
 }
 
 export interface Certification {
@@ -175,6 +192,7 @@ export interface PortfolioData {
   bio: Bio;
   about: AboutContent;
   projects: Project[];
+  futureProjects: FutureProject[];
   internships: Internship[];
   certifications: Certification[];
   hackathons: Hackathon[];

@@ -1,7 +1,6 @@
 import type { Bio, PortfolioData, ProjectStatus, SkillCategory } from '../types/portfolio';
 
 // Local Asset Imports
-import titanHeroImg from '../assets/images/titan/titan hero.png';
 import worksureHeroImg from '../assets/images/worksure/hero.png';
 import worksureEmployerImg from '../assets/images/worksure/employer login.png';
 import worksureEmployeeImg from '../assets/images/worksure/worker login.png';
@@ -11,13 +10,21 @@ import inamigos3Img from '../assets/images/inamigos/Screenshot 2026-08-06 224924
 import inamigos4Img from '../assets/images/inamigos/Screenshot 2026-08-06 224942.png';
 import inamigos5Img from '../assets/images/inamigos/Screenshot 2026-08-06 225009.png';
 
-// Certificate Asset Imports
+// Design Haven Screenshots Imports
+import designHaven1Img from '../assets/images/design haven 1 (1).png';
+import designHaven2Img from '../assets/images/design haven 2.png';
+import designHaven3Img from '../assets/images/design haven(3).png';
+
+// Certificate & Document Asset Imports
 import awsFoundationsCertImg from '../assets/images/certificate/foundations of prompt engineering.png';
 import awsEssentialsCertImg from '../assets/images/certificate/aws essentials prompt engineering.png';
 import mongodbCertImg from '../assets/images/certificate/mongodb.png';
 import ibmCertImg from '../assets/images/certificate/ibm skillsbuild.png';
 import nptelCertImg from '../assets/images/certificate/nptel os.png';
 import threxCertImg from '../assets/images/certificate/threx hackathon.png';
+import futureInternsCertImg from '../assets/images/certificate/future interns completion.jpeg';
+import futureInternsLorImg from '../assets/images/certificate/lor.jpeg';
+import inamigosCertImg from '../assets/images/certificate/internship 1 completion.jpeg';
 
 const bioData: Bio = {
   name: 'Akash Suresh',
@@ -53,38 +60,52 @@ export const portfolioData: PortfolioData = {
 
   projects: [
     {
-      id: 'titan-fitness-club',
-      title: 'Titan Fitness Club',
-      status: 'IN DEVELOPMENT',
-      classification: 'FLAGSHIP',
-      isFlagship: true,
-      category: 'Full Stack',
+      id: 'design-haven',
+      title: 'Design Haven',
+      subtitle: 'Curated Spatial Directions & Interior Showcase',
+      status: 'COMPLETED',
+      classification: 'STANDARD',
+      isFlagship: false,
+      category: 'Web',
       description:
-        'Flagship full-stack fitness management platform under active engineering and development.',
-      technologies: ['React', 'TypeScript', 'Node.js', 'Express', 'SQL'],
-      disclosureLevel: 'confidential',
-      confidentialNotice:
-        'Flagship project under active engineering. Administrative modules and system architecture are confidential until official release. Approved public hero representation is displayed.',
-      heroImage: titanHeroImg,
-      images: [titanHeroImg],
+        'Spatial design showcase interface presenting curated architectural interior directions ("Warm Architectural Sanctuary") with a perspective coverflow carousel.',
+      technologies: ['React', 'TypeScript', 'CSS Modules', 'Prompt Engineering'],
+      contribution: 'Spatial UI Layout & Front-End Development',
+      disclosureLevel: 'public',
+      heroImage: designHaven1Img,
+      images: [designHaven1Img, designHaven2Img, designHaven3Img],
       evidenceImages: [
         {
-          url: titanHeroImg,
-          title: 'Approved Public Hero Visual',
-          description: 'Approved public hero visual representation of Titan Fitness Club.',
+          url: designHaven1Img,
+          title: 'Spatial Coverflow Deck',
+          description: 'Warm Architectural Sanctuary — 01/06 spatial volume & central hearth.',
           type: 'hero',
         },
+        {
+          url: designHaven2Img,
+          title: 'Monolithic Hearth Detail',
+          description: 'Tactile plaster and stone hearth composition display.',
+          type: 'screenshot',
+        },
+        {
+          url: designHaven3Img,
+          title: 'Curated Spatial Directions Header',
+          description: 'Header navigation bar and atmospheric headline typography.',
+          type: 'screenshot',
+        },
       ],
-      publicEvidenceSummary: [
-        'Approved public hero image',
-        'Flagship status & active development roadmap',
-      ],
+      githubUrl: 'https://github.com/AkashS-0107/FUTURE_PE_01',
       whatIsIt:
-        'A comprehensive full-stack fitness platform under active engineering.',
+        'An architectural spatial directions showcase interface presenting curated interior design concepts with an interactive coverflow carousel.',
       whyBuilt:
-        'To build a modern, high-performance web platform for gym management.',
+        'Developed during the Future Interns Prompt Engineering Internship (Track 01: AI Website Generation for Local Businesses & Spatial Showcase Platforms).',
       whatAkashDid:
-        'Full-stack architecture planning, frontend component engineering, and API integration.',
+        'Designed spatial UI layout, coverflow slider mechanics, prompt engineering workflows, and atmospheric dark mode typography.',
+      internshipContext: {
+        organization: 'Future Interns',
+        role: 'Prompt Engineering Intern',
+        period: 'July 2026 — August 2026',
+      },
     },
     {
       id: 'worksure',
@@ -209,67 +230,30 @@ export const portfolioData: PortfolioData = {
       whatAkashDid:
         'Rebuilt entire frontend interface using React & TypeScript, integrated AI-assisted development tools to speed up asset optimization, and improved mobile UX.',
     },
+  ],
+
+  futureProjects: [
     {
-      id: 'future-pe',
-      title: 'Future PE',
-      subtitle: 'Prompt Engineering Internship Project',
-      status: 'IN DEVELOPMENT',
-      classification: 'STANDARD',
-      isFlagship: false,
-      category: 'AI / ML',
-      description:
-        'Active prompt engineering project developed during the Future Interns Prompt Engineering Internship.',
-      internshipContext: {
-        organization: 'Future Interns',
-        role: 'Prompt Engineering Intern',
-        period: 'July 30, 2026 — August 30, 2026',
-      },
-      workstreams: [
-        {
-          id: '01',
-          number: '01',
-          title: 'AI Website Generation for Local Businesses',
-          description:
-            'AI-assisted prompt workflows for generating practical websites for local businesses, including structured requirements, website content, layout direction, and usability.',
-        },
-        {
-          id: '02',
-          number: '02',
-          title: 'AI Content Marketing Using UGC Ads',
-          description:
-            'Prompt-engineering workflows for creating AI-assisted UGC-style marketing content and campaign variations.',
-        },
-        {
-          id: '03',
-          number: '03',
-          title: 'AI SEO Blog & Content Cluster Development for Business Websites',
-          description:
-            'Prompt workflows for SEO-focused blog generation and structured content-cluster development for business websites.',
-        },
-      ],
-      technologies: [
-        'Prompt Engineering',
-        'LLM Workflow Design',
-        'AI Website Structuring',
-        'UGC Campaign Workflows',
-        'SEO Content Clustering',
-      ],
-      toolsMethods: [
-        'Prompt Engineering',
-        'LLM Workflow Design',
-        'AI Website Structuring',
-        'UGC Campaign Workflows',
-        'SEO Content Clustering',
-      ],
-      disclosureLevel: 'limited',
-      confidentialNotice:
-        'Currently in development. Project evidence will be published as deliverables are completed and approved.',
-      whatIsIt:
-        'Future PE is an active prompt engineering project developed during the Future Interns Prompt Engineering Internship.',
-      whyBuilt:
-        'To establish structured prompt engineering workflows and content generation pipelines for local business websites, UGC ad variations, and SEO content clusters.',
-      whatAkashDid:
-        'Designing prompt workflows, structured requirements templates, content generation frameworks, and SEO cluster architectures.',
+      id: 'worksure-remake',
+      title: 'WorkSure Remake',
+      subtitle: 'To be updated',
+      description: 'To be updated',
+      intendedPurpose: 'To be updated',
+      category: 'Web',
+      plannedStatus: 'PLANNED',
+      technologies: [],
+      timeline: 'To be updated',
+    },
+    {
+      id: 'hackathon-projects',
+      title: 'Hackathon Projects',
+      subtitle: 'To be updated',
+      description: 'To be updated',
+      intendedPurpose: 'To be updated',
+      category: 'Web / AI',
+      plannedStatus: 'UPCOMING',
+      technologies: [],
+      timeline: 'To be updated',
     },
   ],
 
@@ -279,8 +263,8 @@ export const portfolioData: PortfolioData = {
       organization: 'InAmigos Foundation',
       company: 'InAmigos Foundation',
       role: 'AI Web Development Intern',
-      startDate: '2026-08-03',
-      endDate: '2026-08-16',
+      startDate: '2026-08-02',
+      endDate: '2026-08-14',
       description:
         'Participated in website development, UI/UX refinement, and feature planning for the foundation platform.',
       responsibilities: [
@@ -301,6 +285,12 @@ export const portfolioData: PortfolioData = {
       ],
       technologies: ['React', 'TypeScript', 'AI-assisted Development', 'Figma'],
       links: ['https://github.com/AkashS-0107/inamigos-foundation'],
+      certificateImage: inamigosCertImg,
+      registrationDetails: [
+        'Regd No. U85300CT2020NPL010641',
+        'CSR-1 Registered (CSR00083159)',
+        '80G (AAFC18183CF20222)',
+      ],
     },
     {
       id: 'future-interns',
@@ -322,6 +312,13 @@ export const portfolioData: PortfolioData = {
         'AI SEO blog and content cluster development for business websites',
       ],
       technologies: ['Prompt Engineering', 'Artificial Intelligence', 'AI-assisted Development', 'SEO'],
+      certificateId: 'FIT/JUL26/PE3770',
+      certificateImage: futureInternsCertImg,
+      lorImage: futureInternsLorImg,
+      registrationDetails: [
+        'ISO 9001 Certified',
+        'MSME Registered (UDYAM-KR-03-0414782)',
+      ],
     },
   ],
 
@@ -344,7 +341,6 @@ export const portfolioData: PortfolioData = {
       whereIApplied:
         'Applied directly during the Prompt Engineering Internship at Future Interns and AI web development workflows.',
       relatedSkills: ['prompt-eng', 'ai-assisted-dev', 'ai'],
-      relatedProjects: ['future-pe'],
     },
     {
       id: 'aws-essentials-prompt-engineering',
@@ -364,7 +360,6 @@ export const portfolioData: PortfolioData = {
       whereIApplied:
         'Utilized for automated content generation and AI-assisted site architecture design at Future Interns.',
       relatedSkills: ['prompt-eng', 'ai-assisted-dev', 'ai'],
-      relatedProjects: ['future-pe'],
     },
     {
       id: 'mongodb-basics-students',
@@ -384,7 +379,6 @@ export const portfolioData: PortfolioData = {
       whereIApplied:
         'Applied in full-stack project design and database service modeling.',
       relatedSkills: ['nodejs', 'express', 'sql', 'typescript'],
-      relatedProjects: ['titan-fitness-club'],
     },
     {
       id: 'ibm-intro-ai',
@@ -404,7 +398,6 @@ export const portfolioData: PortfolioData = {
       whereIApplied:
         'Guides overarching technical direction toward AI/ML engineering specialization.',
       relatedSkills: ['ai', 'ml', 'aiml-dev', 'python'],
-      relatedProjects: ['future-pe'],
     },
     {
       id: 'nptel-intro-os',
@@ -482,7 +475,7 @@ export const portfolioData: PortfolioData = {
       name: 'TypeScript',
       category: 'Programming',
       description: 'Strongly typed JavaScript superset for scalable, error-resilient software.',
-      relatedProjects: ['titan-fitness-club', 'worksure', 'inamigos-rebuild', 'future-pe'],
+      relatedProjects: ['worksure', 'inamigos-rebuild'],
       relatedInternships: ['inamigos-foundation'],
     },
     {
@@ -490,7 +483,7 @@ export const portfolioData: PortfolioData = {
       name: 'React',
       category: 'Web',
       description: 'Primary frontend library for building modular component-driven user interfaces.',
-      relatedProjects: ['titan-fitness-club', 'worksure', 'inamigos-rebuild', 'future-pe'],
+      relatedProjects: ['worksure', 'inamigos-rebuild'],
       relatedInternships: ['inamigos-foundation'],
     },
     {
@@ -498,7 +491,6 @@ export const portfolioData: PortfolioData = {
       name: 'Node.js',
       category: 'Web',
       description: 'JavaScript runtime environment for building fast server-side applications.',
-      relatedProjects: ['titan-fitness-club'],
       relatedCertifications: ['mongodb-basics-students'],
     },
     {
@@ -506,7 +498,6 @@ export const portfolioData: PortfolioData = {
       name: 'Express',
       category: 'Web',
       description: 'Minimalist web framework for Node.js REST API service development.',
-      relatedProjects: ['titan-fitness-club'],
       relatedCertifications: ['mongodb-basics-students'],
     },
     {
@@ -514,7 +505,6 @@ export const portfolioData: PortfolioData = {
       name: 'SQL',
       category: 'Web',
       description: 'Relational database querying and data modeling.',
-      relatedProjects: ['titan-fitness-club'],
       relatedCertifications: ['mongodb-basics-students'],
     },
     {
@@ -546,7 +536,6 @@ export const portfolioData: PortfolioData = {
       description: 'Systematic design of prompts and instructions to steer LLM outputs reliably.',
       relatedCertifications: ['aws-foundations-prompt-engineering', 'aws-essentials-prompt-engineering'],
       relatedInternships: ['future-interns'],
-      relatedProjects: ['future-pe'],
     },
     {
       id: 'ai-assisted-dev',
@@ -577,7 +566,7 @@ export const portfolioData: PortfolioData = {
           id: 'typescript',
           name: 'TypeScript',
           category: 'Programming',
-          relatedProjects: ['titan-fitness-club', 'worksure', 'inamigos-rebuild'],
+          relatedProjects: ['worksure', 'inamigos-rebuild'],
         },
       ],
     },
@@ -588,12 +577,12 @@ export const portfolioData: PortfolioData = {
           id: 'react',
           name: 'React',
           category: 'Web',
-          relatedProjects: ['titan-fitness-club', 'worksure', 'inamigos-rebuild'],
+          relatedProjects: ['worksure', 'inamigos-rebuild'],
           relatedInternships: ['inamigos-foundation'],
         },
-        { id: 'nodejs', name: 'Node.js', category: 'Web', relatedProjects: ['titan-fitness-club'] },
-        { id: 'express', name: 'Express', category: 'Web', relatedProjects: ['titan-fitness-club'] },
-        { id: 'sql', name: 'SQL', category: 'Web', relatedProjects: ['titan-fitness-club'] },
+        { id: 'nodejs', name: 'Node.js', category: 'Web' },
+        { id: 'express', name: 'Express', category: 'Web' },
+        { id: 'sql', name: 'SQL', category: 'Web' },
       ],
     },
     {

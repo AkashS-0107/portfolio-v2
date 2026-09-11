@@ -1,11 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
 import { ExternalLink, Sparkles, Clock, CheckCircle2, AlertCircle, Eye, ShieldAlert, Layers } from 'lucide-react';
 import { portfolioData } from '../../data/portfolioData';
 import type { Project, ProjectStatus } from '../../types/portfolio';
 import { GithubIcon } from '../ui/Icons';
-import { ProjectExplorerModal } from '../ui/ProjectExplorerModal';
 import { ScrollReveal } from '../ui/ScrollReveal';
 import { SectionTransitionLine } from '../ui/SectionTransitionLine';
+
+const ProjectExplorerModal = lazy(() =>
+  import('../ui/ProjectExplorerModal').then((m) => ({ default: m.ProjectExplorerModal }))
+);
 
 const statusBadges: Record<
   ProjectStatus,
@@ -150,7 +153,7 @@ export const Projects: React.FC<ProjectsProps> = ({
           </div>
         )}
 
-        {/* 1. Flagship Project (Titan Fitness Club) */}
+        {/* 1. Flagship Project (if present) */}
         {flagshipProject && (
           <ScrollReveal variant="fade-up" delay={60}>
             <div
@@ -195,10 +198,12 @@ export const Projects: React.FC<ProjectsProps> = ({
                   </p>
 
                   {/* Confidentiality Pill */}
-                  <div className="flex items-center gap-2.5 px-3.5 py-2 rounded bg-[#09090B] border border-[#C56A4A]/30 text-[#C56A4A] font-mono-tech text-xs">
-                    <ShieldAlert className="w-4 h-4 shrink-0 text-[#C56A4A]" />
-                    <span>Public Hero Visual Only — Confidentiality Control</span>
-                  </div>
+                  {flagshipProject.confidentialNotice && (
+                    <div className="flex items-center gap-2.5 px-3.5 py-2 rounded bg-[#09090B] border border-[#C56A4A]/30 text-[#C56A4A] font-mono-tech text-xs">
+                      <ShieldAlert className="w-4 h-4 shrink-0 text-[#C56A4A]" />
+                      <span>{flagshipProject.confidentialNotice}</span>
+                    </div>
+                  )}
                 </div>
 
                 {/* Hero Image preview with scale reveal & desktop physics */}
@@ -213,7 +218,8 @@ export const Projects: React.FC<ProjectsProps> = ({
                     >
                       <img
                         src={flagshipProject.heroImage}
-                        alt="Titan Fitness Club Approved Public Hero Visual"
+                        alt={`${flagshipProject.title} Approved Public Hero Visual`}
+                        loading="lazy"
                         className="w-full h-60 sm:h-64 object-cover object-top transition-transform duration-500 group-hover/img:scale-[1.025]"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-[#09090B]/60 via-transparent to-transparent opacity-60 pointer-events-none" />
@@ -263,7 +269,12 @@ export const Projects: React.FC<ProjectsProps> = ({
         )}
 
         {/* 2. Standard Projects Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {standardProjects.length === 0 && !flagshipProject ? (
+          <div className="p-8 text-center rounded bg-[#141418] border border-[#27272A] text-[#9E9A93] font-mono-tech text-xs sm:text-sm">
+            No projects currently match the &quot;{activeFilter}&quot; filter. Select &quot;ALL&quot; or another category to view projects.
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {standardProjects.map((project, idx) => {
             const badge = statusBadges[project.status];
             const isFuturePe = project.id === 'future-pe';
@@ -322,6 +333,7 @@ export const Projects: React.FC<ProjectsProps> = ({
                           <img
                             src={project.heroImage}
                             alt={project.title}
+                            loading="lazy"
                             className="w-full h-full object-cover object-top transition-transform duration-500 group-hover/img:scale-[1.025]"
                           />
                           <div className="absolute inset-0 bg-[#09090B]/30 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
@@ -436,14 +448,17 @@ export const Projects: React.FC<ProjectsProps> = ({
             );
           })}
         </div>
+        )}
       </div>
 
       {/* Project Explorer Modal */}
-      <ProjectExplorerModal
-        project={selectedProject}
-        isOpen={!!selectedProject}
-        onClose={handleCloseModal}
-      />
+      <Suspense fallback={null}>
+        <ProjectExplorerModal
+          project={selectedProject}
+          isOpen={!!selectedProject}
+          onClose={handleCloseModal}
+        />
+      </Suspense>
     </section>
   );
 };

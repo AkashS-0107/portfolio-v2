@@ -53,7 +53,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
           type="button"
           onClick={onClose}
           className="p-2.5 rounded-full border border-[#27272A] text-[#9E9A93] hover:text-[#F4F4F6] hover:border-[#C56A4A] transition-all min-h-[44px] min-w-[44px] flex items-center justify-center focus-visible:ring-2 focus-visible:ring-[#C56A4A] focus-visible:outline-none"
-          aria-label="Close menu"
+          aria-label="Close mobile overlay"
         >
           <X className="w-5 h-5" />
         </button>

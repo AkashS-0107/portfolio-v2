@@ -152,7 +152,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activeSection, onOpenCommandPale
                 type="button"
                 onClick={toggleMobileMenu}
                 className="px-3.5 py-2 rounded border border-[#27272A] text-[#F4F4F6] hover:border-[#C56A4A] font-heading text-xs font-semibold tracking-wider transition-colors min-h-[44px] flex items-center gap-2 focus-visible:ring-2 focus-visible:ring-[#C56A4A] focus-visible:outline-none"
-                aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+                aria-label={isMobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
                 aria-expanded={isMobileMenuOpen}
               >
                 {isMobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}

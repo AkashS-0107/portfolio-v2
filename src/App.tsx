@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense, lazy } from 'react';
 import { Navbar } from './components/layout/Navbar';
 import { Hero } from './components/sections/Hero';
 import { About } from './components/sections/About';
 import { Skills } from './components/sections/Skills';
 import { Projects } from './components/sections/Projects';
+import { FutureProjects } from './components/sections/FutureProjects';
 import { Internships } from './components/sections/Internships';
 import { CertificationsHackathons } from './components/sections/CertificationsHackathons';
 import { Connect } from './components/sections/Connect';
@@ -12,12 +13,20 @@ import { Footer } from './components/layout/Footer';
 import { useActiveSection } from './hooks/useActiveSection';
 import { navItems } from './data/navigation';
 import { RecruiterViewBar } from './components/ui/RecruiterViewBar';
-import { CommandPalette } from './components/ui/CommandPalette';
 import { CustomCursor } from './components/ui/CustomCursor';
 import { ScrollProgressIndicator } from './components/ui/ScrollProgressIndicator';
 import { BackToTop } from './components/ui/BackToTop';
 import { CinematicIntro } from './components/ui/CinematicIntro';
 import { initTrig } from './lib/trig';
+import { useRouting } from './hooks/useRouting';
+import { useOnlineStatus } from './hooks/useOnlineStatus';
+import { NotFound } from './components/ui/NotFound';
+import { OfflineNotification } from './components/ui/OfflineNotification';
+import { Chatbot } from './components/chat/Chatbot';
+
+const CommandPalette = lazy(() =>
+  import('./components/ui/CommandPalette').then((m) => ({ default: m.CommandPalette }))
+);
 
 export interface ActiveHoveredSkill {
   skillId: string;
@@ -28,6 +37,8 @@ export interface ActiveHoveredSkill {
 export function App() {
   const sectionIds = navItems.map((item) => item.id);
   const activeSection = useActiveSection(sectionIds);
+  const { is404, navigateToHome, navigateToProjects } = useRouting();
+  const { showOfflineBanner, dismissNotification } = useOnlineStatus();
 
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
@@ -64,6 +75,22 @@ export function App() {
       projectsEl.scrollIntoView({ behavior: 'smooth' });
     }
   };
+
+  if (is404) {
+    return (
+      <div className="min-h-screen bg-[#09090B] text-slate-100 font-sans selection:bg-[#C56A4A]/30 selection:text-[#F4F4F6]">
+        <NotFound
+          onBackToPortfolio={navigateToHome}
+          onViewProjects={navigateToProjects}
+        />
+        <OfflineNotification
+          show={showOfflineBanner}
+          onDismiss={dismissNotification}
+        />
+        <CustomCursor />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#09090B] text-slate-100 font-sans selection:bg-[#C56A4A]/30 selection:text-[#F4F4F6]">
@@ -105,6 +132,9 @@ export function App() {
           activeHoveredSkill={activeHoveredSkill}
         />
 
+        {/* 4.5. FUTURE PROJECTS */}
+        <FutureProjects />
+
         {/* 5. EXPERIENCE / INTERNSHIPS */}
         <Internships />
 
@@ -127,14 +157,25 @@ export function App() {
       {/* Recruiter Experience Floating Bar */}
       <RecruiterViewBar />
 
+      {/* Mini Open-Ended AI Chatbot */}
+      <Chatbot />
+
       {/* Command Palette Modal */}
-      <CommandPalette
-        isOpen={isCommandPaletteOpen}
-        onClose={() => setIsCommandPaletteOpen(false)}
-        onSelectProject={handleSelectProjectFromSkill}
-      />
+      <Suspense fallback={null}>
+        <CommandPalette
+          isOpen={isCommandPaletteOpen}
+          onClose={() => setIsCommandPaletteOpen(false)}
+          onSelectProject={handleSelectProjectFromSkill}
+        />
+      </Suspense>
       {/* Custom Hardware-Accelerated Interactive Cursor */}
       <CustomCursor />
+
+      {/* Non-blocking Offline Notification Banner */}
+      <OfflineNotification
+        show={showOfflineBanner}
+        onDismiss={dismissNotification}
+      />
     </div>
   );
 }

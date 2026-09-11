@@ -66,6 +66,32 @@ export const Internships: React.FC = () => {
 
                   <p className="text-[#9E9A93] text-sm leading-relaxed font-body">{internship.description}</p>
 
+                  {/* Document Credential Details & Registration Badges */}
+                  {(internship.certificateId || (internship.registrationDetails && internship.registrationDetails.length > 0)) && (
+                    <div className="p-3 rounded bg-[#09090B] border border-[#27272A] space-y-2 font-mono-tech text-xs">
+                      {internship.certificateId && (
+                        <div className="flex items-center justify-between text-[#C56A4A]">
+                          <span className="font-bold uppercase tracking-wider">VERIFIED CERTIFICATE ID:</span>
+                          <span className="text-[#F4F4F6] font-semibold bg-[#141418] px-2 py-0.5 rounded border border-[#27272A]">
+                            {internship.certificateId}
+                          </span>
+                        </div>
+                      )}
+                      {internship.registrationDetails && (
+                        <div className="flex flex-wrap gap-2 pt-1 border-t border-[#27272A]/60">
+                          {internship.registrationDetails.map((detail, dIdx) => (
+                            <span
+                              key={dIdx}
+                              className="px-2 py-0.5 rounded bg-[#141418] border border-[#27272A] text-[#9E9A93] text-[11px]"
+                            >
+                              {detail}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                   {/* Responsibilities & Deliverables grid */}
                   {internship.responsibilities && internship.responsibilities.length > 0 && (
                     <div className="pt-4 border-t border-[#27272A] space-y-3 font-mono-tech">

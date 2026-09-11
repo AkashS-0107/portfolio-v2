@@ -24,7 +24,7 @@ export const Hero: React.FC<HeroProps> = ({ isIntroActive = false }) => {
       data-trig
       data-trig-var="true"
       data-trig-pixels="true"
-      className="relative min-h-[100svh] min-h-[100dvh] flex flex-col items-center justify-between pt-28 pb-12 px-4 sm:px-6 lg:px-8 overflow-hidden bg-[#09090B]"
+      className="relative min-h-[100svh] min-h-[100dvh] flex flex-col items-center justify-between pt-24 sm:pt-28 pb-6 sm:pb-8 px-4 sm:px-6 lg:px-8 overflow-hidden bg-[#09090B]"
     >
       {/* 03 — Full-Bleed CloudFront Video Atmospheric Background */}
       <div className="absolute inset-0 hero-atmosphere-parallax pointer-events-none z-0">

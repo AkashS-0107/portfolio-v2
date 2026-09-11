@@ -73,16 +73,6 @@ const timelineData: TimelineEvent[] = [
     description: 'Executed complete UI/UX rebuild for InAmigos Foundation and published WorkSure UI/UX revamp.',
     highlights: ['InAmigos Full Rebuild', 'WorkSure 2.0 UI/UX Overhaul', 'Figma & AI-Assisted Dev'],
   },
-  {
-    id: 'titan-flagship-2026',
-    date: 'Active Roadmap',
-    year: '2026+',
-    title: 'Titan Fitness Club Flagship Platform',
-    subtitle: 'Full-Stack Development in Progress',
-    category: 'flagship',
-    description: 'Active engineering and development of multi-tenant fitness management platform under confidential disclosure.',
-    highlights: ['Flagship Architecture', 'React + Node.js + SQL', 'Confidential Public Hero'],
-  },
 ];
 
 const categoryIcons = {
@@ -93,7 +83,7 @@ const categoryIcons = {
 };
 
 export const CareerTimeline: React.FC = () => {
-  const [selectedId, setSelectedId] = useState<string>(timelineData[timelineData.length - 2].id);
+  const [selectedId, setSelectedId] = useState<string>(timelineData[timelineData.length - 1].id);
 
   const selectedEvent = timelineData.find((e) => e.id === selectedId) || timelineData[0];
 
