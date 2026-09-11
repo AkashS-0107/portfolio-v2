@@ -85,7 +85,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({ isOpen, onClose,
             category: 'Quick Links' as const,
             action: () => {
               if (professionalLinks.email) {
-                window.location.assign(professionalLinks.email);
+                window.open(professionalLinks.email, '_self');
               }
               onClose();
             },

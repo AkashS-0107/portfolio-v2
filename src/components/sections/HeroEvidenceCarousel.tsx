@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { ChevronLeft, ChevronRight, ExternalLink, ShieldCheck, Lock, Clock } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ExternalLink, ShieldCheck, Lock } from 'lucide-react';
 
 // Asset Imports for Evidence
 import worksureHeroImg from '../../assets/images/worksure/hero.png';
@@ -19,7 +19,7 @@ import ibmCertImg from '../../assets/images/certificate/ibm skillsbuild.png';
 interface CarouselCard {
   id: string;
   badge: string;
-  status: 'FLAGSHIP' | 'COMPLETED' | 'CREDENTIALS' | 'IN DEVELOPMENT';
+  status: 'FLAGSHIP' | 'COMPLETED' | 'CREDENTIALS';
   title: string;
   subtitle: string;
   description: string;
@@ -32,8 +32,6 @@ interface CarouselCard {
   }>;
   isConfidential?: boolean;
   confidentialNotice?: string;
-  isEditorialPreview?: boolean;
-  tracks?: string[];
   targetSectionId: string;
 }
 
@@ -52,7 +50,7 @@ export const HeroEvidenceCarousel: React.FC = () => {
       links: [
         {
           label: 'Design Haven Repository',
-          url: 'https://github.com/AkashS-0107/design-haven',
+          url: 'https://github.com/AkashS-0107/FUTURE_PE_01',
           author: 'Akash Suresh',
         },
       ],
@@ -98,22 +96,6 @@ export const HeroEvidenceCarousel: React.FC = () => {
           url: 'https://github.com/AkashS-0107/inamigos-foundation',
           author: 'Akash Suresh',
         },
-      ],
-      targetSectionId: 'projects',
-    },
-    {
-      id: 'future-pe',
-      badge: 'INTERNSHIP PROJECT',
-      status: 'IN DEVELOPMENT',
-      title: 'Future PE',
-      subtitle: 'Prompt Engineering Internship',
-      description:
-        'Active prompt engineering project developed during the Future Interns Prompt Engineering Internship.',
-      isEditorialPreview: true,
-      tracks: [
-        'AI Website Generation',
-        'UGC Content Marketing',
-        'SEO Content Clusters',
       ],
       targetSectionId: 'projects',
     },
@@ -258,75 +240,24 @@ export const HeroEvidenceCarousel: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
           {/* Left / Top Visual Stage (7 Cols on desktop) */}
           <div className="lg:col-span-7 relative bg-[#09090B] overflow-hidden min-h-[260px] sm:min-h-[340px] flex items-center justify-center p-4 sm:p-6">
-            {activeCard.isEditorialPreview ? (
-              <div className="relative w-full h-full rounded-lg border border-[#27272A] bg-[#141418] p-5 sm:p-6 flex flex-col justify-between space-y-4">
-                <div className="flex items-center justify-between gap-2 border-b border-[#27272A] pb-3">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-[#C56A4A] animate-pulse" />
-                    <span className="font-mono-tech text-xs text-[#C56A4A] uppercase font-bold tracking-wider">
-                      Future Interns — Internship Project
-                    </span>
-                  </div>
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded bg-[#09090B] border border-[#C56A4A]/40 text-[#C56A4A] font-mono-tech text-[10px] font-bold uppercase">
-                    <Clock className="w-3 h-3 animate-pulse text-[#C56A4A]" />
-                    <span>IN DEVELOPMENT</span>
-                  </div>
-                </div>
+            <div className="relative w-full h-full rounded-lg overflow-hidden border border-[#27272A]/50 bg-[#09090B] flex items-center justify-center">
+              {activeCard.mainImage && (
+                <img
+                  src={activeCard.mainImage}
+                  alt={`${activeCard.title} Visual Evidence`}
+                  className="w-full h-auto max-h-[380px] object-cover object-top rounded-lg group-hover:scale-[1.015] transition-transform duration-700 ease-out"
+                  loading="eager"
+                />
+              )}
 
-                <div className="space-y-1.5">
-                  <span className="font-mono-tech text-[10px] text-[#9E9A93] tracking-widest uppercase">
-                    EDITORIAL PROJECT PREVIEW
-                  </span>
-                  <h4 className="font-heading text-2xl sm:text-3xl font-bold text-[#F4F4F6] tracking-tight">
-                    {activeCard.title}
-                  </h4>
-                  <p className="font-mono-tech text-xs text-[#C56A4A] font-medium">
-                    {activeCard.subtitle} • July 30, 2026 — August 30, 2026
-                  </p>
+              {/* Confidential Badge if applicable */}
+              {activeCard.isConfidential && (
+                <div className="absolute top-3 left-3 inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#09090B]/90 backdrop-blur-md border border-[#C56A4A]/50 text-[#C56A4A] text-[11px] font-mono-tech tracking-wider uppercase shadow-lg">
+                  <Lock className="w-3 h-3 text-[#C56A4A]" />
+                  <span>Approved Hero Representation</span>
                 </div>
-
-                <div className="space-y-2">
-                  <span className="font-mono-tech text-[10px] text-[#9E9A93] uppercase tracking-wider block">
-                    CONFIRMED DELIVERABLE TRACKS:
-                  </span>
-                  <div className="grid grid-cols-1 gap-2">
-                    {activeCard.tracks?.map((track, i) => (
-                      <div
-                        key={track}
-                        className="flex items-center gap-2.5 p-2 rounded bg-[#09090B] border border-[#27272A] text-xs font-mono-tech text-[#F4F4F6]"
-                      >
-                        <span className="text-[#C56A4A] font-bold">0{i + 1}</span>
-                        <span>{track}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="p-2.5 rounded bg-[#09090B] border border-[#27272A] text-[11px] font-mono-tech text-[#9E9A93] flex items-center gap-2">
-                  <Clock className="w-3.5 h-3.5 text-[#C56A4A] shrink-0" />
-                  <span>CURRENTLY BEING DEVELOPED — Evidence will be published upon deliverable completion.</span>
-                </div>
-              </div>
-            ) : (
-              <div className="relative w-full h-full rounded-lg overflow-hidden border border-[#27272A]/50 bg-[#09090B] flex items-center justify-center">
-                {activeCard.mainImage && (
-                  <img
-                    src={activeCard.mainImage}
-                    alt={`${activeCard.title} Visual Evidence`}
-                    className="w-full h-auto max-h-[380px] object-cover object-top rounded-lg group-hover:scale-[1.015] transition-transform duration-700 ease-out"
-                    loading="eager"
-                  />
-                )}
-
-                {/* Confidential Badge if applicable */}
-                {activeCard.isConfidential && (
-                  <div className="absolute top-3 left-3 inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#09090B]/90 backdrop-blur-md border border-[#C56A4A]/50 text-[#C56A4A] text-[11px] font-mono-tech tracking-wider uppercase shadow-lg">
-                    <Lock className="w-3 h-3 text-[#C56A4A]" />
-                    <span>Approved Hero Representation</span>
-                  </div>
-                )}
-              </div>
-            )}
+              )}
+            </div>
 
             {/* Floating Secondary Preview Thumbnails on Desktop if present */}
             {activeCard.secondaryImages && activeCard.secondaryImages.length > 0 && (

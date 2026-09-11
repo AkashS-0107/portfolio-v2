@@ -145,10 +145,10 @@ export const Hero: React.FC<HeroProps> = ({ isIntroActive = false }) => {
             </div>
             <div className="space-y-0.5">
               <span className="font-mono-tech text-[10px] text-[#9E9A93] uppercase tracking-wider block">
-                CURRENT
+                STATUS
               </span>
-              <span className="font-heading text-xs sm:text-xs font-bold text-[#C56A4A] uppercase tracking-wide">
-                IN DEVELOPMENT
+              <span className="font-heading text-xs sm:text-xs font-bold text-[#10B981] uppercase tracking-wide">
+                COMPLETED
               </span>
             </div>
           </div>

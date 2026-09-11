@@ -277,7 +277,6 @@ export const Projects: React.FC<ProjectsProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {standardProjects.map((project, idx) => {
             const badge = statusBadges[project.status];
-            const isFuturePe = project.id === 'future-pe';
 
             return (
               <ScrollReveal
@@ -306,50 +305,34 @@ export const Projects: React.FC<ProjectsProps> = ({
                       </div>
                     </div>
 
-                    {/* Future PE Editorial Header or Standard Hero Thumbnail */}
-                    {isFuturePe ? (
-                      <div className="mb-5 p-4 rounded bg-[#09090B] border border-[#27272A] space-y-3">
-                        <div className="flex items-center justify-between">
-                          <span className="font-mono-tech text-[10px] text-[#C56A4A] uppercase font-bold tracking-wider">
-                            {project.internshipContext?.organization}
-                          </span>
-                          <span className="font-mono-tech text-[10px] text-[#9E9A93]">
-                            {project.internshipContext?.role}
+                    {/* Standard Hero Thumbnail */}
+                    {project.heroImage && (
+                      <div
+                        data-cursor="view"
+                        onMouseMove={handleImageMouseMove}
+                        onClick={() => setInternalSelectedProject(project)}
+                        className="mb-4 rounded overflow-hidden border border-[#27272A] h-40 bg-[#09090B] cursor-pointer group/img transition-colors relative project-image-interactive"
+                        style={{ transform: 'translateY(calc(var(--trig-px, 0px) * -0.025))' }}
+                      >
+                        <img
+                          src={project.heroImage}
+                          alt={project.title}
+                          loading="lazy"
+                          className="w-full h-full object-cover object-top transition-transform duration-500 group-hover/img:scale-[1.025]"
+                        />
+                        <div className="absolute inset-0 bg-[#09090B]/30 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#09090B]/90 border border-[#C56A4A]/60 text-[#C56A4A] font-mono-tech text-[11px] font-bold shadow-lg transform translate-y-1 group-hover/img:translate-y-0 transition-transform duration-300">
+                            <Eye className="w-3.5 h-3.5" />
+                            <span>EXPLORE PROJECT</span>
                           </span>
                         </div>
-                        <p className="font-mono-tech text-[11px] text-[#9E9A93] border-t border-[#27272A]/80 pt-2">
-                          {project.internshipContext?.period}
-                        </p>
+                        {project.evidenceImages && project.evidenceImages.length > 1 && (
+                          <span className="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-[#09090B]/90 text-[#C56A4A] font-mono-tech text-[10px] border border-[#27272A] flex items-center gap-1 shadow-md">
+                            <Layers className="w-3 h-3 text-[#C56A4A]" />
+                            <span>{project.evidenceImages.length} SHOTS</span>
+                          </span>
+                        )}
                       </div>
-                    ) : (
-                      project.heroImage && (
-                        <div
-                          data-cursor="view"
-                          onMouseMove={handleImageMouseMove}
-                          onClick={() => setInternalSelectedProject(project)}
-                          className="mb-4 rounded overflow-hidden border border-[#27272A] h-40 bg-[#09090B] cursor-pointer group/img transition-colors relative project-image-interactive"
-                          style={{ transform: 'translateY(calc(var(--trig-px, 0px) * -0.025))' }}
-                        >
-                          <img
-                            src={project.heroImage}
-                            alt={project.title}
-                            loading="lazy"
-                            className="w-full h-full object-cover object-top transition-transform duration-500 group-hover/img:scale-[1.025]"
-                          />
-                          <div className="absolute inset-0 bg-[#09090B]/30 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
-                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#09090B]/90 border border-[#C56A4A]/60 text-[#C56A4A] font-mono-tech text-[11px] font-bold shadow-lg transform translate-y-1 group-hover/img:translate-y-0 transition-transform duration-300">
-                              <Eye className="w-3.5 h-3.5" />
-                              <span>EXPLORE PROJECT</span>
-                            </span>
-                          </div>
-                          {project.evidenceImages && project.evidenceImages.length > 1 && (
-                            <span className="absolute bottom-2 right-2 px-2 py-0.5 rounded bg-[#09090B]/90 text-[#C56A4A] font-mono-tech text-[10px] border border-[#27272A] flex items-center gap-1 shadow-md">
-                              <Layers className="w-3 h-3 text-[#C56A4A]" />
-                              <span>{project.evidenceImages.length} SHOTS</span>
-                            </span>
-                          )}
-                        </div>
-                      )
                     )}
 
                     {/* Title & Subtitle */}
@@ -373,26 +356,6 @@ export const Projects: React.FC<ProjectsProps> = ({
                     <p className="text-[#9E9A93] text-xs sm:text-sm leading-relaxed mb-4 font-body">
                       {project.description}
                     </p>
-
-                    {/* Workstreams list for Future PE */}
-                    {project.workstreams && project.workstreams.length > 0 && (
-                      <div className="mb-5 space-y-2">
-                        <span className="font-mono-tech text-[10px] text-[#C56A4A] uppercase tracking-wider block font-bold">
-                          CONFIRMED WORKSTREAMS:
-                        </span>
-                        <div className="space-y-1.5">
-                          {project.workstreams.map((ws) => (
-                            <div
-                              key={ws.id}
-                              className="p-2 rounded bg-[#09090B] border border-[#27272A] text-xs font-mono-tech text-[#F4F4F6]"
-                            >
-                              <span className="text-[#C56A4A] font-bold mr-1.5">{ws.number.replace(/^0/, '')}</span>
-                              <span>{ws.title}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
 
                     {/* Tech stack */}
                     <div className="flex flex-wrap gap-1.5 mb-6">

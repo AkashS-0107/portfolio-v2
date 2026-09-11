@@ -31,7 +31,6 @@ const SKILL_NAME_MAP: Record<string, string> = {
 
 const PROJECT_NAME_MAP: Record<string, string> = {
   'design-haven': 'Design Haven',
-  'future-pe': 'Future PE',
   'inamigos-foundation': 'InAmigos Foundation',
   'worksure': 'WorkSure',
 };

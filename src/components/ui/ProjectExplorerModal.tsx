@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, ExternalLink, ShieldAlert, Code2, Layers, CheckCircle2, Eye, UserCheck, AlertTriangle, Briefcase, Wrench, Clock, Sparkles } from 'lucide-react';
+import { X, ExternalLink, ShieldAlert, Code2, Layers, CheckCircle2, Eye, UserCheck, AlertTriangle } from 'lucide-react';
 import type { Project } from '../../types/portfolio';
 import { GithubIcon } from './Icons';
 import { ProjectGalleryLightbox } from './ProjectGalleryLightbox';
@@ -33,8 +33,6 @@ export const ProjectExplorerModal: React.FC<ProjectExplorerModalProps> = ({ proj
     setLightboxOpen(true);
   };
 
-  const isFuturePe = project.id === 'future-pe';
-
   return (
     <>
       <div
@@ -67,118 +65,8 @@ export const ProjectExplorerModal: React.FC<ProjectExplorerModalProps> = ({ proj
 
           {/* Body Content */}
           <div className="p-6 space-y-8 flex-1">
-            {/* Future PE Dedicated Explorer View */}
-            {isFuturePe ? (
-              <div className="space-y-6">
-                {/* 1. OVERVIEW & INTERNSHIP CONTEXT */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="p-5 rounded bg-[#141418] border border-[#27272A] space-y-2">
-                    <h3 className="font-mono-tech text-xs font-bold text-[#C56A4A] uppercase tracking-widest flex items-center gap-2">
-                      <Sparkles className="w-4 h-4 text-[#C56A4A]" />
-                      <span>OVERVIEW</span>
-                    </h3>
-                    <p className="text-sm text-[#F4F4F6] leading-relaxed font-body">
-                      Future PE is an active prompt engineering project developed during the Future Interns Prompt Engineering Internship.
-                    </p>
-                  </div>
-
-                  {project.internshipContext && (
-                    <div className="p-5 rounded bg-[#141418] border border-[#27272A] space-y-2">
-                      <h3 className="font-mono-tech text-xs font-bold text-[#C56A4A] uppercase tracking-widest flex items-center gap-2">
-                        <Briefcase className="w-4 h-4 text-[#C56A4A]" />
-                        <span>INTERNSHIP</span>
-                      </h3>
-                      <div className="font-mono-tech text-xs space-y-1">
-                        <p className="text-[#F4F4F6] font-bold text-sm">
-                          {project.internshipContext.organization}
-                        </p>
-                        <p className="text-[#C56A4A]">
-                          {project.internshipContext.role}
-                        </p>
-                        <p className="text-[#9E9A93]">
-                          {project.internshipContext.period}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* 2. CURRENT WORK */}
-                <div className="p-5 rounded bg-[#141418] border border-[#27272A] space-y-2">
-                  <h3 className="font-mono-tech text-xs font-bold text-[#C56A4A] uppercase tracking-widest flex items-center gap-2">
-                    <Clock className="w-4 h-4 text-[#C56A4A]" />
-                    <span>CURRENT WORK</span>
-                  </h3>
-                  <p className="text-xs text-[#9E9A93] leading-relaxed font-body">
-                    The project is currently IN DEVELOPMENT, focusing on designing, optimizing, and evaluating production prompt engineering workflows across three core business deliverable tracks.
-                  </p>
-                </div>
-
-                {/* 3. PROJECT TRACKS */}
-                {project.workstreams && project.workstreams.length > 0 && (
-                  <div className="space-y-3">
-                    <h3 className="font-mono-tech text-xs font-bold text-[#C56A4A] uppercase tracking-widest flex items-center gap-2">
-                      <Layers className="w-4 h-4 text-[#C56A4A]" />
-                      <span>PROJECT TRACKS</span>
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      {project.workstreams.map((ws) => (
-                        <div
-                          key={ws.id}
-                          className="p-4 rounded bg-[#141418] border border-[#27272A] space-y-2 flex flex-col justify-between"
-                        >
-                          <div className="space-y-1.5">
-                            <span className="font-mono-tech text-xs font-bold text-[#C56A4A]">
-                              {ws.number.replace(/^0/, '')}
-                            </span>
-                            <h4 className="font-heading text-sm font-bold text-[#F4F4F6]">
-                              {ws.title}
-                            </h4>
-                            <p className="text-xs text-[#9E9A93] leading-relaxed font-body">
-                              {ws.description}
-                            </p>
-                          </div>
-                          <div className="pt-2 border-t border-[#27272A] text-[10px] font-mono-tech text-[#C56A4A] uppercase">
-                            Deliverable Track {ws.number.replace(/^0/, '')}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* 4. TOOLS & METHODS */}
-                <div className="space-y-2">
-                  <h3 className="font-mono-tech text-xs font-bold text-[#9E9A93] uppercase tracking-widest flex items-center gap-2">
-                    <Wrench className="w-4 h-4 text-[#C56A4A]" />
-                    <span>TOOLS & METHODS</span>
-                  </h3>
-                  <div className="flex flex-wrap gap-2">
-                    {(project.toolsMethods || project.technologies).map((method) => (
-                      <span
-                        key={method}
-                        className="px-3 py-1 rounded bg-[#141418] border border-[#27272A] text-[#F4F4F6] font-mono-tech text-xs"
-                      >
-                        {method}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-
-                {/* 5. EVIDENCE */}
-                <div className="p-4 rounded bg-[#141418] border border-[#27272A] space-y-2">
-                  <h3 className="font-mono-tech text-xs font-bold text-[#C56A4A] uppercase tracking-widest flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-[#C56A4A]" />
-                    <span>EVIDENCE</span>
-                  </h3>
-                  <p className="text-xs text-[#9E9A93] leading-relaxed font-body">
-                    Implementation evidence will be added as the individual workstreams are completed and approved for publication.
-                  </p>
-                </div>
-              </div>
-            ) : (
-              <>
-                {/* Project Confidentiality Notice */}
+            <div className="space-y-8">
+              {/* Project Confidentiality Notice */}
                 {project.confidentialNotice && (
                   <div className="p-4 rounded bg-[#141418] border-l-2 border-[#C56A4A] border-y border-r border-[#27272A] text-[#C56A4A] text-xs font-mono-tech space-y-2">
                     <div className="flex items-center gap-2 font-bold tracking-wider">
@@ -354,8 +242,7 @@ export const ProjectExplorerModal: React.FC<ProjectExplorerModalProps> = ({ proj
                     </div>
                   </div>
                 )}
-              </>
-            )}
+            </div>
           </div>
 
           {/* Footer Bar */}

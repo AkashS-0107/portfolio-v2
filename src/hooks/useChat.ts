@@ -83,13 +83,31 @@ export function useChat() {
           signal: controller.signal,
         });
 
-        const data = await response.json();
+        const rawText = await response.text();
+        let data: Record<string, unknown> | null = null;
 
-        if (!response.ok) {
-          throw new Error(data.error || `HTTP error ${response.status}`);
+        if (rawText && rawText.trim().length > 0) {
+          try {
+            data = JSON.parse(rawText) as Record<string, unknown>;
+          } catch {
+            data = null;
+          }
         }
 
-        const replyContent = data.message || data.response || 'No response returned.';
+        if (!response.ok) {
+          const apiErr = data && typeof data.error === 'string' ? data.error : null;
+          const statusText = `Server error (HTTP ${response.status}). Please try again later.`;
+          throw new Error(apiErr || statusText);
+        }
+
+        if (!data || typeof data !== 'object') {
+          throw new Error(`Server error (HTTP ${response.status}). Please try again later.`);
+        }
+
+        const replyContent =
+          (typeof data.message === 'string' && data.message) ||
+          (typeof data.response === 'string' && data.response) ||
+          'No response returned.';
 
         const assistantMessage: ChatMessage = {
           id: `assist-${Date.now()}`,
@@ -103,7 +121,12 @@ export function useChat() {
       } catch (err: unknown) {
         if (err instanceof Error && err.name === 'AbortError') return;
 
-        const errorMsg = err instanceof Error ? err.message : 'Network failure';
+        let errorMsg = err instanceof Error ? err.message : 'Network failure';
+
+        // Sanitize any raw SyntaxError, JSON parse errors, or HTML snippets
+        if (/SyntaxError|JSON|Unexpected token|<|<!DOCTYPE/i.test(errorMsg)) {
+          errorMsg = 'Server error (HTTP 500). Please try again later.';
+        }
 
         // Fallback response on error
         const fallbackText = getLocalFallbackResponse(trimmed);

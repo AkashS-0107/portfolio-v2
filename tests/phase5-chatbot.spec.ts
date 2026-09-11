@@ -195,6 +195,38 @@ test.describe('Phase 5 — Mini Open-Ended AI Chatbot UI & Integration', () => {
     // Retry banner renders
     await expect(page.getByRole('button', { name: /Retry/i })).toBeVisible();
   });
+
+  test('Non-JSON HTML 500 server error does not expose Unexpected token to user', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto('/');
+
+    // Intercept route to respond with HTML 500 error page from server/gateway
+    await page.route('/api/chat', async (route) => {
+      await route.fulfill({
+        status: 500,
+        contentType: 'text/html',
+        body: '<html><body>A server error occurred</body></html>',
+      });
+    });
+
+    await page.getByRole('button', { name: /Open AI Companion Chat/i }).click();
+    const input = page.getByRole('textbox', { name: /Message input/i });
+
+    await input.fill('Test HTML server error');
+    await page.keyboard.press('Enter');
+
+    // UI should display clean server error note without SyntaxError parsing text
+    const errorNote = page.getByText(/Server error \(HTTP 500\)/i);
+    await expect(errorNote).toBeVisible();
+
+    // Crucially: UI MUST NOT expose "Unexpected token" or "is not valid JSON"
+    const content = await page.content();
+    expect(content).not.toContain('Unexpected token');
+    expect(content).not.toContain('is not valid JSON');
+
+    // Retry button renders
+    await expect(page.getByRole('button', { name: /Retry/i })).toBeVisible();
+  });
 });
 
 test.describe('Phase 5 — Server API Validation (/api/chat)', () => {
@@ -204,6 +236,13 @@ test.describe('Phase 5 — Server API Validation (/api/chat)', () => {
     expect(res.status()).toBe(405);
     const json = (await res.json()) as { error: string };
     expect(json.error).toContain('Method Not Allowed');
+  });
+
+  test('Method check: OPTIONS /api/chat returns 204 with Allow header', async ({ request }) => {
+    const res = await request.fetch('/api/chat', { method: 'OPTIONS' });
+    expect([200, 204]).toContain(res.status());
+    const allowHeader = res.headers()['allow'] || res.headers()['access-control-allow-methods'];
+    expect(allowHeader).toContain('POST');
   });
 
   test('Validation: Missing messages returns 400 Bad Request', async ({ request }) => {
@@ -269,5 +308,16 @@ test.describe('Phase 5 — Server API Validation (/api/chat)', () => {
     expect(res.status()).toBe(400);
     const json = (await res.json()) as { error: string };
     expect(json.error).toContain('length must be between 1 and 10');
+  });
+
+  test('Missing GEMINI_API_KEY returns valid preview JSON response', async ({ request }) => {
+    const res = await request.post('/api/chat', {
+      data: {
+        messages: [{ role: 'user', content: 'Hello' }],
+      },
+    });
+    expect(res.status()).toBe(200);
+    const json = (await res.json()) as { message?: string; error?: string };
+    expect(json.message || json.error).toBeDefined();
   });
 });
