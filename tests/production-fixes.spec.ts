@@ -5,18 +5,18 @@ test.describe('Production Bug Fixes Audit — Portfolio V2', () => {
   // ==========================================
   // 1. FUTURE INTERNS & PE CLEANUP AUDIT
   // ==========================================
-  test('Future PE and IN DEVELOPMENT project cards are completely removed', async ({ page }) => {
+  test('Future PE is completely removed and Intellicluster reflects active development', async ({ page }) => {
     await page.goto('/');
 
     const pageText = await page.innerText('body');
 
-    // Assert zero occurrences of stale Future PE / IN DEVELOPMENT project text
+    // Assert zero occurrences of stale Future PE / Currently Being Developed project text
     expect(pageText).not.toContain('Future PE');
     expect(pageText).not.toContain('Currently Being Developed');
 
-    // Ensure Projects section doesn't have an IN DEVELOPMENT badge on any project card
-    const projectsSection = page.locator('#projects');
-    await expect(projectsSection.getByText('IN DEVELOPMENT')).toHaveCount(0);
+    // Ensure Intellicluster card has the IN DEVELOPMENT badge scoped specifically
+    const intelliclusterCard = page.locator('#projects').filter({ hasText: 'Intellicluster' });
+    await expect(intelliclusterCard.getByText('IN DEVELOPMENT')).toBeVisible();
   });
 
   test('Future Interns internship shows COMPLETED state, verified dates, cert ID, registration details', async ({ page }) => {
@@ -85,12 +85,14 @@ test.describe('Production Bug Fixes Audit — Portfolio V2', () => {
     await expect(modal).not.toBeVisible();
   });
 
-  test('Future Projects contains exactly WorkSure Remake and Hackathon Projects', async ({ page }) => {
+  test('Future Projects contains WorkSure Remake and obsolete Hackathon Projects placeholder is removed', async ({ page }) => {
     await page.goto('/#future-projects');
 
     const futureSection = page.locator('#future-projects');
     await expect(futureSection.getByText('WorkSure Remake')).toBeVisible();
-    await expect(futureSection.getByText('Hackathon Projects')).toBeVisible();
+
+    // Ensure obsolete placeholder Hackathon Projects is absent (superseded by IAMFixer in main Projects)
+    await expect(futureSection.getByText('Hackathon Projects')).toHaveCount(0);
 
     // Ensure no extra future projects or stale Future PE
     await expect(futureSection.getByText('Future PE')).toHaveCount(0);

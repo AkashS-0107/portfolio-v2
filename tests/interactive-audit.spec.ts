@@ -95,7 +95,7 @@ test.describe('Exhaustive Interactive Element Audit Suite', () => {
   });
 
   // 4. Future Projects Section Entry Check
-  test('4. Future Projects section renders EXACTLY WorkSure Remake and Hackathon Projects with minimal status', async ({ page }) => {
+  test('4. Future Projects section renders WorkSure Remake and prunes obsolete Hackathon Projects placeholder', async ({ page }) => {
     await gotoAndSkipIntro(page, '/#future-projects');
     await page.waitForTimeout(300);
 
@@ -106,11 +106,8 @@ test.describe('Exhaustive Interactive Element Audit Suite', () => {
     await expect(futureSection.getByText('WorkSure Remake')).toBeVisible();
     await expect(futureSection.getByText('PLANNED').first()).toBeVisible();
 
-    // Verify Hackathon Projects entry
-    await expect(futureSection.getByText('Hackathon Projects')).toBeVisible();
-    await expect(futureSection.getByText('UPCOMING').first()).toBeVisible();
-
-    // Verify obsolete entries are NOT present
+    // Verify obsolete placeholder entries are NOT present
+    await expect(futureSection.getByText('Hackathon Projects')).not.toBeVisible();
     await expect(futureSection.getByText('Browser AI Agent Sandbox')).not.toBeVisible();
     await expect(futureSection.getByText('AI SEO Content Cluster Generator')).not.toBeVisible();
     await expect(futureSection.getByText('Future PE')).not.toBeVisible();

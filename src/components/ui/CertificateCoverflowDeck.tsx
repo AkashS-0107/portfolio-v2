@@ -33,6 +33,8 @@ const PROJECT_NAME_MAP: Record<string, string> = {
   'design-haven': 'Design Haven',
   'inamigos-foundation': 'InAmigos Foundation',
   'worksure': 'WorkSure',
+  'iamfixer': 'IAMFixer',
+  'intellicluster': 'Intellicluster',
 };
 
 export const CertificateCoverflowDeck: React.FC = () => {

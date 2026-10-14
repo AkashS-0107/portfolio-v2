@@ -25,6 +25,9 @@ const threxCertImg = new URL('../assets/images/certificate/threx hackathon.png',
 const futureInternsCertImg = new URL('../assets/images/certificate/future interns completion.jpeg', import.meta.url).href;
 const futureInternsLorImg = new URL('../assets/images/certificate/lor.jpeg', import.meta.url).href;
 const inamigosCertImg = new URL('../assets/images/certificate/internship 1 completion.jpeg', import.meta.url).href;
+const awsGenAiSolnsCertImg = new URL('../assets/images/certificate/aws developing gen ai solns.png', import.meta.url).href;
+const awsAiPractitionerCertImg = new URL('../assets/images/certificate/aws ai certified.png', import.meta.url).href;
+const wemakedevsHackathonCertImg = new URL('../assets/images/wemakedevs hackathon cert.png', import.meta.url).href;
 
 const bioData: Bio = {
   name: 'Akash Suresh',
@@ -230,6 +233,75 @@ export const portfolioData: PortfolioData = {
       whatAkashDid:
         'Rebuilt entire frontend interface using React & TypeScript, integrated AI-assisted development tools to speed up asset optimization, and improved mobile UX.',
     },
+    {
+      id: 'iamfixer',
+      title: 'IAMFixer',
+      subtitle: 'Hackathon Prototype · WeMakeDevs First Commit',
+      status: 'COMPLETED',
+      classification: 'STANDARD',
+      isFlagship: false,
+      category: 'AI / Full Stack',
+      description:
+        'Evidence-backed incident investigation and root-cause analysis prototype combining AI-assisted analysis, telemetry evidence, structured result validation, deterministic fallback analysis, and human-reviewed remediation recommendations.',
+      technologies: [
+        'Python',
+        'FastAPI',
+        'Pydantic',
+        'React',
+        'TypeScript',
+        'SQLite',
+        'Amazon Bedrock',
+      ],
+      contribution: 'Full-Stack Development & AI Investigation Architecture',
+      disclosureLevel: 'public',
+      githubUrl: 'https://github.com/AkashS-0107/IAMFixer',
+      repositoriesList: [
+        {
+          label: 'IAMFixer Repository',
+          url: 'https://github.com/AkashS-0107/IAMFixer',
+          author: 'Akash Suresh',
+          role: 'Incident Investigation Platform Architecture & Development',
+          type: 'fullstack',
+        },
+      ],
+      whatIsIt:
+        'An evidence-backed incident investigation and root-cause analysis prototype designed to detect and diagnose software failures using application telemetry and structured analysis.',
+      whyBuilt:
+        'Developed as a hackathon prototype for WeMakeDevs First Commit (Bharat Builds Tour · Event 01) to explore telemetry-driven incident response workflows.',
+      whatAkashDid:
+        'Built the FastAPI backend API with Pydantic schemas and SQLite storage, integrated Amazon Bedrock for root-cause analysis, implemented deterministic fallback analysis, and created the React frontend.',
+    },
+    {
+      id: 'intellicluster',
+      title: 'Intellicluster',
+      subtitle: 'Cluster Management & Workload Optimization',
+      status: 'IN DEVELOPMENT',
+      classification: 'STANDARD',
+      isFlagship: false,
+      category: 'AI / Distributed Systems',
+      targetCompletion: 'October 26, 2026',
+      description:
+        'Cluster management and workload optimization platform in active development, focusing on intelligent node monitoring, telemetry visualization, and resource efficiency.',
+      technologies: ['TypeScript', 'React', 'Python'],
+      contribution: 'System Architecture & Interface Development',
+      disclosureLevel: 'public',
+      githubUrl: 'https://github.com/AkashS-0107/Intellicluster',
+      repositoriesList: [
+        {
+          label: 'Intellicluster Repository',
+          url: 'https://github.com/AkashS-0107/Intellicluster',
+          author: 'Akash Suresh',
+          role: 'Architecture & Full-Stack Development',
+          type: 'fullstack',
+        },
+      ],
+      whatIsIt:
+        'A cluster management platform currently in development to monitor workload distribution, system metrics, and cluster health.',
+      whyBuilt:
+        'To provide structured telemetry and management tooling for compute clusters and distributed workloads.',
+      whatAkashDid:
+        'Currently architecting the core cluster telemetry models, API integration layers, and management dashboard interface.',
+    },
   ],
 
   futureProjects: [
@@ -241,17 +313,6 @@ export const portfolioData: PortfolioData = {
       intendedPurpose: 'To be updated',
       category: 'Web',
       plannedStatus: 'PLANNED',
-      technologies: [],
-      timeline: 'To be updated',
-    },
-    {
-      id: 'hackathon-projects',
-      title: 'Hackathon Projects',
-      subtitle: 'To be updated',
-      description: 'To be updated',
-      intendedPurpose: 'To be updated',
-      category: 'Web / AI',
-      plannedStatus: 'UPCOMING',
       technologies: [],
       timeline: 'To be updated',
     },
@@ -419,6 +480,46 @@ export const portfolioData: PortfolioData = {
         'Informs algorithmic design, clean memory management, and system-level software optimization.',
       relatedSkills: ['c', 'cpp', 'python'],
     },
+    {
+      id: 'aws-developing-gen-ai-solutions',
+      issuer: 'AWS Training & Certification',
+      title: 'Developing Generative Artificial Intelligence Solutions',
+      issueDate: '2026-09-13',
+      date: 'September 13, 2026',
+      category: 'AI / Generative AI',
+      status: 'Completion Certificate',
+      image: awsGenAiSolnsCertImg,
+      whatILearned: [
+        'Generative artificial intelligence solution patterns on AWS',
+        'Foundation model integration and prompt construction workflows',
+      ],
+      whyItMatters:
+        'Establishes core architectural patterns for integrating generative AI services into software solutions.',
+      whereIApplied:
+        'Applied in designing AI-assisted root-cause investigation workflows for IAMFixer.',
+      relatedSkills: ['ai', 'prompt-eng', 'python'],
+      relatedProjects: ['iamfixer'],
+    },
+    {
+      id: 'aws-ai-practitioner-learning-plan',
+      issuer: 'AWS Training & Certification',
+      title: 'AWS Artificial Intelligence Practitioner Learning Plan',
+      issueDate: '2026-09-21',
+      date: 'September 21, 2026',
+      category: 'AI / Cloud',
+      status: 'Learning Plan Completion',
+      image: awsAiPractitionerCertImg,
+      whatILearned: [
+        'Fundamentals of artificial intelligence, machine learning, and generative AI concepts',
+        'Core AWS artificial intelligence and machine learning services landscape',
+      ],
+      whyItMatters:
+        'Provides practical grounding across modern cloud AI concepts and foundational machine learning workloads.',
+      whereIApplied:
+        'Informs practical development choices across cloud AI integrations and machine learning experimentation.',
+      relatedSkills: ['ai', 'ml'],
+      relatedProjects: ['iamfixer'],
+    },
   ],
 
   hackathons: [
@@ -426,12 +527,29 @@ export const portfolioData: PortfolioData = {
       id: 'threx-hackathon',
       event: 'THREX Hackathon',
       name: 'THREX Hackathon',
+      organizer: 'THREX Hackathon',
       date: '2026-02-01',
       status: 'Participant',
       certificate: 'Certificate of Participation',
       certificateImage: threxCertImg,
       description: 'Participated in competitive hackathon focused on rapid problem solving and prototype development.',
       technologies: ['React', 'JavaScript', 'Web APIs'],
+    },
+    {
+      id: 'wemakedevs-first-commit',
+      event: 'Bharat Builds Tour · First Commit, Event 01',
+      name: 'WeMakeDevs First Commit',
+      organizer: 'WeMakeDevs with AWS',
+      date: 'September 20, 2026',
+      status: 'Participant',
+      certificate: 'Certificate of Participation',
+      projectName: 'IAMFixer',
+      projectUrl: 'https://github.com/AkashS-0107/IAMFixer',
+      projectId: 'iamfixer',
+      certificateImage: wemakedevsHackathonCertImg,
+      description:
+        'Participated in Event 01 of the Bharat Builds Tour hackathon series organized by WeMakeDevs with AWS, building and shipping IAMFixer — an incident investigation and root-cause analysis prototype.',
+      technologies: ['AWS Bedrock', 'FastAPI', 'Python', 'React', 'TypeScript', 'Tailwind CSS'],
     },
   ],
 
@@ -441,7 +559,8 @@ export const portfolioData: PortfolioData = {
       name: 'Python',
       category: 'Programming',
       description: 'Used for AI/ML experimentation, data processing, and scripting.',
-      relatedCertifications: ['ibm-intro-ai', 'nptel-intro-os'],
+      relatedCertifications: ['ibm-intro-ai', 'nptel-intro-os', 'aws-developing-gen-ai-solutions'],
+      relatedProjects: ['iamfixer', 'intellicluster'],
     },
     {
       id: 'c',
@@ -512,7 +631,13 @@ export const portfolioData: PortfolioData = {
       name: 'Artificial Intelligence',
       category: 'AI',
       description: 'Study and application of intelligent agents and automated decision systems.',
-      relatedCertifications: ['ibm-intro-ai', 'aws-foundations-prompt-engineering'],
+      relatedCertifications: [
+        'ibm-intro-ai',
+        'aws-foundations-prompt-engineering',
+        'aws-developing-gen-ai-solutions',
+        'aws-ai-practitioner-learning-plan',
+      ],
+      relatedProjects: ['iamfixer', 'intellicluster'],
       relatedInternships: ['future-interns', 'inamigos-foundation'],
     },
     {

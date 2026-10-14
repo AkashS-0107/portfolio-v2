@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Trophy, ShieldCheck, CheckCircle2, Eye } from 'lucide-react';
+import { Trophy, ShieldCheck, CheckCircle2, Eye, ExternalLink } from 'lucide-react';
 import { portfolioData } from '../../data/portfolioData';
 import type { Hackathon } from '../../types/portfolio';
 import { CertificateCoverflowDeck } from '../ui/CertificateCoverflowDeck';
@@ -25,12 +25,12 @@ export const CertificationsHackathons: React.FC = () => {
           subtitle="A collection of verified certifications and hackathon experience, with the learning story behind each one."
         />
 
-        {/* 1. Immersive 5-Certificate Coverflow Experience */}
+        {/* 1. Immersive 7-Certificate Fan-Deck Experience */}
         <ScrollReveal variant="fade-up" delay={80}>
           <CertificateCoverflowDeck />
         </ScrollReveal>
 
-        {/* 2. Hackathons & Competitions Area (THREX Hackathon Separation) */}
+        {/* 2. Hackathons & Competitions Area */}
         <ScrollReveal variant="fade-up" delay={140}>
           <div className="space-y-6 pt-10 border-t border-[#27272A]">
             <div className="flex items-center justify-between gap-4 pb-2 border-b border-[#27272A]">
@@ -41,7 +41,7 @@ export const CertificationsHackathons: React.FC = () => {
                 </h3>
               </div>
               <span className="text-xs text-[#9E9A93] font-mono-tech">
-                Hackathon Entry ({hackathons.length})
+                Hackathon Entries ({hackathons.length})
               </span>
             </div>
 
@@ -54,13 +54,13 @@ export const CertificationsHackathons: React.FC = () => {
                   staggerStep={80}
                   delay={180}
                 >
-                  <div className="p-6 rounded-xl bg-[#141418] border border-[#27272A] hover:border-[#33333C] transition-all space-y-4 shadow-xl h-full flex flex-col justify-between">
+                  <div className="p-6 rounded-xl bg-[#141418] border border-[#27272A] hover:border-[#33333C] transition-all space-y-5 shadow-xl h-full flex flex-col justify-between">
                     <div className="space-y-4">
                       <div className="flex items-center justify-between gap-2">
                         <span className="text-xs text-[#C56A4A] font-bold uppercase tracking-widest font-mono-tech">
-                          Hackathon • {hack.event || hack.name}
+                          Hackathon • {hack.organizer || hack.event || hack.name}
                         </span>
-                        {/* Status Badge: MUST display Participant for THREX */}
+                        {/* Status Badge: MUST display Participant */}
                         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#09090B] border border-[#27272A] text-[#C56A4A] text-xs font-semibold font-mono-tech">
                           <ShieldCheck className="w-3.5 h-3.5 text-[#C56A4A]" />
                           <span>{hack.status}</span>
@@ -88,20 +88,63 @@ export const CertificationsHackathons: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Hackathon Certificate Image Trigger */}
+                    {/* Visible Hackathon Certificate Image Preview */}
                     {hack.certificateImage && (
-                      <div className="pt-3 border-t border-[#27272A]/70 flex items-center justify-between">
-                        <span className="text-xs text-[#9E9A93] uppercase font-mono-tech">
-                          Participation Certificate
-                        </span>
-                        <button
-                          type="button"
+                      <div className="space-y-3 pt-3 border-t border-[#27272A]/70">
+                        <div
                           onClick={() => setActiveHackathonCert(hack)}
-                          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded bg-[#09090B] border border-[#27272A] hover:border-[#C56A4A] text-[#C56A4A] text-xs font-semibold font-mono-tech transition-all min-h-[44px] focus-visible:ring-2 focus-visible:ring-[#C56A4A] focus-visible:outline-none"
+                          className="relative rounded-lg overflow-hidden border border-[#27272A] hover:border-[#C56A4A]/60 bg-[#09090B] cursor-pointer group/cert transition-all aspect-[16/10] flex items-center justify-center shadow-inner"
+                          role="button"
+                          tabIndex={0}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter' || e.key === ' ') {
+                              e.preventDefault();
+                              setActiveHackathonCert(hack);
+                            }
+                          }}
+                          aria-label={`View full certificate for ${hack.event || hack.name}`}
                         >
-                          <Eye className="w-4 h-4" />
-                          <span>INSPECT CERTIFICATE</span>
-                        </button>
+                          <img
+                            src={hack.certificateImage}
+                            alt={`Certificate of Participation for ${hack.event || hack.name} awarded to Akash Suresh`}
+                            className="w-full h-full object-cover sm:object-contain transition-transform duration-300 group-hover/cert:scale-[1.02]"
+                            loading="lazy"
+                          />
+                          <div className="absolute inset-0 bg-[#09090B]/40 opacity-0 group-hover/cert:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#09090B]/95 border border-[#C56A4A] text-[#C56A4A] font-mono-tech text-xs font-bold shadow-lg">
+                              <Eye className="w-3.5 h-3.5" />
+                              <span>CLICK TO ENLARGE</span>
+                            </span>
+                          </div>
+                        </div>
+
+                        <div className="flex flex-wrap items-center justify-between gap-2">
+                          <span className="text-[11px] text-[#9E9A93] uppercase font-mono-tech">
+                            Participation Evidence
+                          </span>
+                          <div className="flex items-center gap-2">
+                            {hack.projectUrl && (
+                              <a
+                                href={hack.projectUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#09090B] border border-[#27272A] hover:border-[#C56A4A] text-[#F4F4F6] hover:text-[#C56A4A] text-xs font-mono-tech font-semibold transition-all min-h-[44px]"
+                                aria-label={`View ${hack.projectName || 'project'} repository`}
+                              >
+                                <ExternalLink className="w-3.5 h-3.5" />
+                                <span>{hack.projectName || 'PROJECT'} REPO</span>
+                              </a>
+                            )}
+                            <button
+                              type="button"
+                              onClick={() => setActiveHackathonCert(hack)}
+                              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded bg-[#09090B] border border-[#27272A] hover:border-[#C56A4A] text-[#C56A4A] text-xs font-semibold font-mono-tech transition-all min-h-[44px] focus-visible:ring-2 focus-visible:ring-[#C56A4A] focus-visible:outline-none"
+                            >
+                              <Eye className="w-4 h-4" />
+                              <span>INSPECT</span>
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     )}
                   </div>
@@ -118,7 +161,7 @@ export const CertificationsHackathons: React.FC = () => {
           isOpen={!!activeHackathonCert}
           onClose={() => setActiveHackathonCert(null)}
           title={activeHackathonCert.event || activeHackathonCert.name || 'Hackathon Certificate'}
-          issuer="THREX Hackathon"
+          issuer={activeHackathonCert.organizer || activeHackathonCert.event || 'Hackathon'}
           date={activeHackathonCert.date}
           image={activeHackathonCert.certificateImage}
         />

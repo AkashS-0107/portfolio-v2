@@ -94,7 +94,7 @@ export const Projects: React.FC<ProjectsProps> = ({
 
   const filteredProjects = projects.filter((p) => {
     if (activeFilter === 'ALL') return true;
-    if (activeFilter === 'FULL STACK') return p.category === 'Full Stack' || p.isFlagship;
+    if (activeFilter === 'FULL STACK') return p.category.includes('Full Stack') || p.isFlagship;
     if (activeFilter === 'WEB') return p.category === 'Web' || p.category === 'Web Platform';
     if (activeFilter === 'AI / ML')
       return (
@@ -293,7 +293,7 @@ export const Projects: React.FC<ProjectsProps> = ({
                 >
                   <div>
                     {/* Status & Category */}
-                    <div className="flex items-center justify-between gap-2 mb-4">
+                    <div className="flex items-center justify-between gap-2 mb-3">
                       <span className="font-mono-tech text-[11px] text-[#C56A4A] font-semibold tracking-widest uppercase bg-[#09090B] px-2.5 py-0.5 rounded border border-[#27272A]">
                         {project.category}
                       </span>
@@ -304,6 +304,14 @@ export const Projects: React.FC<ProjectsProps> = ({
                         <span>{badge.label}</span>
                       </div>
                     </div>
+
+                    {/* Target Completion Date (for projects in development) */}
+                    {project.targetCompletion && (
+                      <div className="mb-4 px-3 py-1.5 rounded bg-[#09090B] border border-[#C56A4A]/30 text-xs font-mono-tech flex items-center justify-between">
+                        <span className="text-[#9E9A93] text-[10px] uppercase font-semibold">TARGET COMPLETION:</span>
+                        <span className="text-[#C56A4A] font-bold text-[11px]">{project.targetCompletion}</span>
+                      </div>
+                    )}
 
                     {/* Standard Hero Thumbnail */}
                     {project.heroImage && (

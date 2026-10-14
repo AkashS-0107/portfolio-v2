@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, ExternalLink, ShieldAlert, Code2, Layers, CheckCircle2, Eye, UserCheck, AlertTriangle } from 'lucide-react';
+import { X, ExternalLink, ShieldAlert, Code2, Layers, CheckCircle2, Eye, UserCheck, AlertTriangle, Clock } from 'lucide-react';
 import type { Project } from '../../types/portfolio';
 import { GithubIcon } from './Icons';
 import { ProjectGalleryLightbox } from './ProjectGalleryLightbox';
@@ -66,6 +66,22 @@ export const ProjectExplorerModal: React.FC<ProjectExplorerModalProps> = ({ proj
           {/* Body Content */}
           <div className="p-6 space-y-8 flex-1">
             <div className="space-y-8">
+              {/* Target Completion Notice for In-Development Projects */}
+              {project.targetCompletion && (
+                <div className="p-4 rounded bg-[#141418] border-l-2 border-[#C56A4A] border-y border-r border-[#27272A] text-xs font-mono-tech flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex items-center gap-2 text-[#C56A4A] font-bold">
+                    <Clock className="w-4 h-4 text-[#C56A4A] animate-pulse" />
+                    <span>PROJECT IN ACTIVE DEVELOPMENT</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[#9E9A93] uppercase">TARGET COMPLETION:</span>
+                    <span className="text-[#F4F4F6] font-bold bg-[#09090B] px-2.5 py-0.5 rounded border border-[#27272A] text-[#C56A4A]">
+                      {project.targetCompletion}
+                    </span>
+                  </div>
+                </div>
+              )}
+
               {/* Project Confidentiality Notice */}
                 {project.confidentialNotice && (
                   <div className="p-4 rounded bg-[#141418] border-l-2 border-[#C56A4A] border-y border-r border-[#27272A] text-[#C56A4A] text-xs font-mono-tech space-y-2">

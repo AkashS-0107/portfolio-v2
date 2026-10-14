@@ -124,10 +124,13 @@ export interface Hackathon {
   id: string;
   event: string;
   name?: string;
+  organizer?: string;
   date: string;
   status: HackathonStatus;
   certificate?: string;
   projectName?: string;
+  projectUrl?: string;
+  projectId?: string;
   technologies?: string[];
   certificateUrl?: string;
   certificateImage?: string;
