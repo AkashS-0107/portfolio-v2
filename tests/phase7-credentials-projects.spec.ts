@@ -49,6 +49,9 @@ test.describe('Phase 7 — Credentials (Certifications & Hackathons) & Projects 
     // Verify presence of AWS Artificial Intelligence Practitioner Learning Plan
     const practitionerTitle = certSection.getByText('AWS Artificial Intelligence Practitioner Learning Plan');
 
+    await expect(genAiTitle.first()).toBeVisible();
+    await expect(practitionerTitle.first()).toBeVisible();
+
     // At least one or both should be indexable in deck slides or text
     const pageHtml = await page.content();
     expect(pageHtml).toContain('Developing Generative Artificial Intelligence Solutions');
@@ -118,7 +121,7 @@ test.describe('Phase 7 — Credentials (Certifications & Hackathons) & Projects 
 
   test('WeMakeDevs certificate lightbox displays dynamic issuer and correct certificate image', async ({ page }) => {
     await gotoAndSkipIntro(page, '/#certifications-hackathons');
-    const wemakedevsCard = page.locator('#certifications-hackathons').filter({ hasText: 'WeMakeDevs' });
+    const wemakedevsCard = page.locator('#certifications-hackathons .p-6').filter({ hasText: 'WeMakeDevs' }).first();
 
     const inspectBtn = wemakedevsCard.getByRole('button', { name: /INSPECT/i }).first();
     await inspectBtn.click();
@@ -128,7 +131,7 @@ test.describe('Phase 7 — Credentials (Certifications & Hackathons) & Projects 
 
     // Verify modal does NOT display hardcoded THREX issuer for WeMakeDevs
     const dialogText = await dialog.innerText();
-    expect(dialogText).toContain('WeMakeDevs with AWS');
+    expect(dialogText.toUpperCase()).toContain('WEMAKEDEVS WITH AWS');
     expect(dialogText).not.toContain('THREX Hackathon • Verified Evidence');
 
     await page.keyboard.press('Escape');
@@ -148,9 +151,9 @@ test.describe('Phase 7 — Credentials (Certifications & Hackathons) & Projects 
     await expect(iamfixerCard.getByText(/WeMakeDevs First Commit/i)).toBeVisible();
 
     // Verify stack contains Python, FastAPI, React, TypeScript, Amazon Bedrock
-    await expect(iamfixerCard.getByText('FastAPI')).toBeVisible();
-    await expect(iamfixerCard.getByText('Python')).toBeVisible();
-    await expect(iamfixerCard.getByText('Amazon Bedrock')).toBeVisible();
+    await expect(iamfixerCard.getByText('FastAPI').first()).toBeVisible();
+    await expect(iamfixerCard.getByText('Python').first()).toBeVisible();
+    await expect(iamfixerCard.getByText('Amazon Bedrock').first()).toBeVisible();
 
     // Verify repository link
     const repoLink = iamfixerCard.locator('a[href="https://github.com/AkashS-0107/IAMFixer"]');
@@ -193,7 +196,7 @@ test.describe('Phase 7 — Credentials (Certifications & Hackathons) & Projects 
 
     await expect(futureSection.getByText('WorkSure Remake')).toBeVisible();
     await expect(futureSection.getByText('Hackathon Projects')).toHaveCount(0);
-    await expect(futureSection.getByText('To be updated')).toBeVisible(); // Preserves existing placeholder without invented roadmap
+    await expect(futureSection.getByText('To be updated').first()).toBeVisible(); // Preserves existing placeholder without invented roadmap
   });
 
   // ==========================================
@@ -217,7 +220,7 @@ test.describe('Phase 7 — Credentials (Certifications & Hackathons) & Projects 
     await gotoAndSkipIntro(page, '/#internships');
     const internshipSection = page.locator('#internships');
 
-    await expect(internshipSection.getByText('Future Interns')).toBeVisible();
+    await expect(internshipSection.getByText('Future Interns', { exact: true }).first()).toBeVisible();
     await expect(internshipSection.getByText('FIT/JUL26/PE3770')).toBeVisible();
     await expect(internshipSection.getByText('ISO 9001 Certified')).toBeVisible();
     await expect(internshipSection.getByText('MSME Registered (UDYAM-KR-03-0414782)')).toBeVisible();

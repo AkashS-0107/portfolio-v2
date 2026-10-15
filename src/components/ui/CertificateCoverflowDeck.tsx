@@ -52,7 +52,7 @@ export const CertificateCoverflowDeck: React.FC = () => {
     alt: `Official certificate document for ${cert.title} issued by ${cert.issuer}`,
     title: cert.title,
     issuer: cert.issuer,
-    date: cert.issueDate || cert.date || cert.year,
+    date: cert.date || cert.issueDate || cert.year,
     category: cert.category,
     badge: cert.status,
   }));
@@ -119,7 +119,7 @@ export const CertificateCoverflowDeck: React.FC = () => {
                 {activeCert.issuer}
               </span>
               <span className="text-xs text-[#9E9A93] font-mono-tech font-semibold">
-                {activeCert.issueDate || activeCert.date || activeCert.year}
+                {activeCert.date || activeCert.issueDate || activeCert.year}
               </span>
             </div>
             <h3 className="text-xl sm:text-2xl font-bold text-[#F4F4F6] tracking-tight font-heading">
@@ -246,7 +246,7 @@ export const CertificateCoverflowDeck: React.FC = () => {
         onClose={() => setIsLightboxOpen(false)}
         title={activeCert.title}
         issuer={activeCert.issuer}
-        date={activeCert.issueDate || activeCert.date || activeCert.year}
+        date={activeCert.date || activeCert.issueDate || activeCert.year}
         image={activeCert.image}
         verificationUrl={activeCert.verificationUrl}
         onPrev={handlePrev}

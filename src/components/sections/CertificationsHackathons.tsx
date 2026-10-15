@@ -108,7 +108,7 @@ export const CertificationsHackathons: React.FC = () => {
                             src={hack.certificateImage}
                             alt={`Certificate of Participation for ${hack.event || hack.name} awarded to Akash Suresh`}
                             className="w-full h-full object-cover sm:object-contain transition-transform duration-300 group-hover/cert:scale-[1.02]"
-                            loading="lazy"
+                            loading="eager"
                           />
                           <div className="absolute inset-0 bg-[#09090B]/40 opacity-0 group-hover/cert:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
                             <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-[#09090B]/95 border border-[#C56A4A] text-[#C56A4A] font-mono-tech text-xs font-bold shadow-lg">

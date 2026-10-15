@@ -530,12 +530,12 @@ export const FanDeckCarousel: React.FC<FanDeckCarouselProps> = ({
                   src={slide.image}
                   alt={slide.alt}
                   className="max-h-full max-w-full w-auto h-auto object-contain rounded border border-[#27272A] bg-[#141418] shadow-md transition-transform duration-300 group-hover:scale-[1.01]"
-                  loading={isActive ? 'eager' : 'lazy'}
+                  loading="eager"
                 />
 
                 {/* Inspect Overlay Trigger on Active Slide */}
                 {isActive && (
-                  <div className="absolute inset-0 bg-[#09090B]/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px]">
+                  <div className="absolute inset-0 bg-[#09090B]/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-[2px] pointer-events-none">
                     <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-md bg-[#C56A4A] text-[#09090B] font-mono-tech text-xs font-bold shadow-2xl">
                       <Maximize2 className="w-3.5 h-3.5" />
                       <span>INSPECT FULLSCREEN</span>
